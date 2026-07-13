@@ -40,4 +40,8 @@ class Enrollment extends Model
     {
         return $this->belongsTo(Promotion::class);
     }
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

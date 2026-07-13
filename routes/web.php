@@ -36,12 +36,26 @@ Route::get('/Etudiants/{student:matricule}/edit', Students_Edit::class)->name('s
 // Route::get('/Inscriptions', Enrollment_Index::class)->name('enrollment.index')->middleware('auth');
 
 
+Route::prefix('admin')->group(function () {
+
+    // Payment
+    Route::get('/paiements', App\Livewire\Payment\Index::class)->name('admin.payments');
+    Route::get('/paiements/{payment}/edit', App\Livewire\Payment\Edit::class)->name('payment.edit');
+
+    Route::get('/payments', App\Livewire\Payment\Index::class)->name('payment.index');
+    Route::get('/payments/create', App\Livewire\Payment\Create::class)->name('payment.create');
+    Route::get('/payments/{payment}', App\Livewire\Payment\Show::class)->name('payment.show');
+    Route::get('/payments/{payment}/receipt', App\Http\Controllers\Payment\Receipt::class)->name('payment.receipt');
+
+
+})->middleware('auth');
 
 Route::prefix('admin.setting')->group(function () {
     Route::get('/faculties', Faculty_Index::class)->name('admin.faculty');
     Route::get('/AcademiqueYears', Academ_Year_Index::class)->name('admin.academic_year');
     Route::get('/Departements', Department_Index::class)->name('admin.department');
     Route::get('/Promotions', Promotion_Index::class)->name('admin.promotion');
+    Route::get('/fees', App\Livewire\Settings\Fees::class)->name('admin.fee');
 
 
 })->middleware('auth');

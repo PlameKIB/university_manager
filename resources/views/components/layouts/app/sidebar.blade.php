@@ -23,10 +23,16 @@
                     Dashboard
                 </flux:navlist.item>
 
-                {{-- Inscription rapide --}}
+                   {{-- Inscription rapide --}}
                 <flux:navlist.item icon="identification" :href="route('enrollment.create')"
                     :current="request()->routeIs('enrollment.create')" wire:navigate>
                     Inscription
+                </flux:navlist.item>
+
+                {{-- Payment --}}
+                <flux:navlist.item icon="credit-card" :href="route('admin.payments')"
+                    :current="request()->routeIs('admin.payments')" wire:navigate>
+                    Paiements
                 </flux:navlist.item>
 
                 {{-- MENU INSCRIPTIONS --}}
@@ -80,6 +86,10 @@
 
                     <flux:navlist.item icon="bookmark" :href="route('admin.promotion')" wire:navigate>
                         Promotion
+                    </flux:navlist.item>
+
+                       <flux:navlist.item icon="currency-dollar" :href="route('admin.fee')" wire:navigate>
+                        Frais academiques
                     </flux:navlist.item>
 
                 </flux:navlist.group>
