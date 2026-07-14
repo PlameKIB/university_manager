@@ -151,12 +151,12 @@
 
         {{-- ACTIONS --}}
         <div class="px-6 pb-6 flex items-center justify-between">
-            <a href="{{ route('enrollment.index') }}"
+            <a href="{{ route('releve.show', $enrollment->id) }}"
                 class="inline-flex items-center gap-2 px-5 py-3 bg-gray-100 dark:bg-gray-700
                        text-gray-700 dark:text-white rounded-xl font-semibold text-sm
                        hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                <i class="fa-solid fa-xmark text-xs"></i>
-                Annuler
+                <i class="fa-solid fa-file-alt text-xs"></i>
+                Voir le relevé  
             </a>
             <button wire:click="save"
                 wire:loading.attr="disabled"

@@ -35,6 +35,14 @@
                     Paiements
                 </flux:navlist.item>
 
+                {{-- MENU COTATION (ENSEIGNANT UNIQUEMENT) --}}
+                @hasanyrole('enseignant|admin')
+                <flux:navlist.item icon="clipboard-document-check" :href="route('cotation.index')"
+                    :current="request()->routeIs('cotation.*')" wire:navigate>
+                    Mes cours à coter
+                </flux:navlist.item>
+                @endhasanyrole
+
                 {{-- MENU INSCRIPTIONS --}}
                 <flux:navlist.group expandable collapsed heading="Inscriptions" icon="document-text">
 
@@ -69,6 +77,21 @@
 
                 </flux:navlist.group>
 
+                {{-- MENU COURS / COTATION (ADMIN) --}}
+                <flux:navlist.group expandable collapsed heading="Cours" icon="book-open">
+
+                    <flux:navlist.item icon="book-open" :href="route('admin.course')"
+                        :current="request()->routeIs('admin.course')" wire:navigate>
+                        Catalogue des cours
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="link" :href="route('admin.course_assignment')"
+                        :current="request()->routeIs('admin.course_assignment')" wire:navigate>
+                        Attributions (enseignant / promotion)
+                    </flux:navlist.item>
+
+                </flux:navlist.group>
+
                 {{-- MENU PARAMETRES --}}
                 <flux:navlist.group expandable collapsed heading="Paramètres" icon="cog-6-tooth">
 
@@ -94,15 +117,13 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
-                <!-- Teachers -->
-                <flux:navlist.group expandable collapsed heading="Enseignants" icon="user">
 
-                    
+                {{-- Teachers --}}
+                <flux:navlist.group expandable collapsed heading="Enseignants" icon="user">
 
                     <flux:navlist.item icon="user-plus" :href="route('admin.teacher.create')" wire:navigate>
                         Nouvel enseignant
                     </flux:navlist.item>
-
 
                 </flux:navlist.group>
 

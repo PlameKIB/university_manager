@@ -256,6 +256,12 @@
                                         <i class="fa-solid fa-pen text-sm"></i>
                                     </a>
 
+                                    <a href="{{ route('releve.show', $inscription->id) }}" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100
+                                                      dark:bg-green-900/20 dark:hover:bg-green-900/40
+                                                      flex items-center justify-center text-green-600 transition">
+                                        <i class="fa-solid fa-print text-sm"></i>
+                                    </a>
+
                                     <button wire:click="delete({{ $inscription->id }})"
                                         wire:confirm="Voulez-vous vraiment supprimer cette inscription ?" class="w-9 h-9 rounded-lg bg-red-50 hover:bg-red-100
                                                        dark:bg-red-900/20 dark:hover:bg-red-900/40

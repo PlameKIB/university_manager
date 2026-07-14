@@ -159,6 +159,7 @@ class Create extends Component
                 'registration_date' => $this->registration_date,
                 'status' => 'active',
             ]);
+            $student->assignRole('student');
         });
 
         $this->reset();

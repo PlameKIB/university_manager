@@ -20,6 +20,7 @@ class Create extends Component
 
     #[Rule('required|email', as: 'Email')]
     public $email;
+    public $gender;
 
     public $password;
     public $user_id;
@@ -32,7 +33,9 @@ class Create extends Component
         return [
             'name' => 'required|string|min:3, as: "Nom complet"',
             'telephone' => 'nullable|string|min:8|max:15, as: "Téléphone"',
+            'gender' => 'nullable|string, as: "Genre"',
             'email' => 'required|email|unique:users,email,' . $this->user_id,
+            'password' => 'nullable|string|min:6, as: "Mot de passe"',
         ];
     }
 
@@ -46,8 +49,9 @@ class Create extends Component
                 'matricule' => $this->genereMatricule(),
                 'name' => $this->name,
                 'telephone' => $this->telephone,
+                'gender' => $this->gender,
                 'email' => $this->email,
-                'password' => Hash::make('password'),
+                'password' => Hash::make($this->password),
             ]);
             $user->assignRole('enseignant');
         });
@@ -66,6 +70,7 @@ class Create extends Component
         $this->name = $teacher->name;
         $this->telephone = $teacher->telephone;
         $this->email = $teacher->email;
+        $this->gender = $teacher->gender;
 
         $this->isEditing = true;
     }
@@ -81,6 +86,7 @@ class Create extends Component
                 'name' => $this->name,
                 'telephone' => $this->telephone,
                 'email' => $this->email,
+                'gender' => $this->gender,
             ]);
 
         });

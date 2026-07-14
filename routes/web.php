@@ -14,6 +14,11 @@ use App\Livewire\Enrollment\Create as Enrollment_Create;
 use App\Livewire\Student\Index as Student_Index;
 use App\Livewire\Student\Edit as Students_Edit;
 
+use App\Livewire\Course\Index as Course_Index;
+use App\Livewire\CourseAssignment\Index as CourseAssignment_Index;
+use App\Livewire\Cotation\Index as Cotation_Index;
+use App\Livewire\Cotation\Grade as Cotation_Grade;
+
 
 Route::get('/', function () {
     return view('welcome');
@@ -53,6 +58,14 @@ Route::prefix('admin')->group(function () {
     Route::get('/teachers/{teacher}/edit', App\Livewire\Teacher\Create::class)->name('admin.teacher.edit');
 
 
+    Route::prefix('enseignant')->middleware(['auth', 'role:enseignant|admin'])->group(function () {
+        Route::get('/mes-cours', Cotation_Index::class)->name('cotation.index');
+        Route::get('/cotation/{courseAssignment}', Cotation_Grade::class)->name('cotation.grade');
+    });
+
+    Route::get('/releve/{enrollment}', App\Http\Controllers\Releve\Show::class)
+        ->name('releve.show')
+        ->middleware('auth');
 })->middleware('auth');
 
 Route::prefix('admin.setting')->group(function () {
@@ -62,7 +75,8 @@ Route::prefix('admin.setting')->group(function () {
     Route::get('/Promotions', Promotion_Index::class)->name('admin.promotion');
     Route::get('/fees', App\Livewire\Settings\Fees::class)->name('admin.fee');
 
-
+    Route::get('/cours', Course_Index::class)->name('admin.course');
+    Route::get('/attributions', CourseAssignment_Index::class)->name('admin.course_assignment');
 })->middleware('auth');
 
 Route::middleware(['auth'])->group(function () {
