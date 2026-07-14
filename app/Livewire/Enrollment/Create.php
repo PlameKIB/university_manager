@@ -8,7 +8,7 @@ use App\Models\Department;
 use App\Models\Enrollment;
 use App\Models\Faculty;
 use App\Models\Promotion;
-use App\Models\Student;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -26,11 +26,9 @@ class Create extends Component
     // =====================
     public $student_id;
     public $matricule;
-    public $nom;
-    public $postnom;
-    public $prenom;
     public $genre;
     public $telephone;
+    public $name;
     public $email;
     public $date_naissance;
     public $adresse;
@@ -46,9 +44,7 @@ class Create extends Component
     public $departments = [];
     public $promotions = [];
 
-    // =====================
-    // RECHERCHE ETUDIANT — retourne une liste
-    // =====================
+
     public function updatedSearch($value)
     {
         $this->existingStudent = null;
@@ -59,10 +55,10 @@ class Create extends Component
             return;
         }
 
-        $results = Student::where('matricule', 'like', '%' . $this->search . '%')
+        $results = User::role('student')->where('matricule', 'like', '%' . $this->search . '%')
             ->orWhere('telephone', 'like', '%' . $this->search . '%')
-            ->orWhere('nom', 'like', '%' . $this->search . '%')
-            ->orWhere('postnom', 'like', '%' . $this->search . '%')
+            ->orWhere('name', 'like', '%' . $this->search . '%')
+            ->orWhere('email', 'like', '%' . $this->search . '%')
             ->limit(10)
             ->get();
 
@@ -73,9 +69,8 @@ class Create extends Component
             $this->searchResults = $results->map(fn($s) => [
                 'id' => $s->id,
                 'matricule' => $s->matricule,
-                'nom' => $s->nom,
-                'postnom' => $s->postnom,
-                'prenom' => $s->prenom,
+                'name' => $s->name,
+                'genre' => $s->genre,
                 'telephone' => $s->telephone,
                 'email' => $s->email,
             ])->toArray();
@@ -88,12 +83,10 @@ class Create extends Component
         $this->existingStudent = null;
 
     }
-    // =====================
-    // SÉLECTION D'UN ÉTUDIANT DANS LA LISTE
-    // =====================
+
     public function selectStudent(int $studentId)
     {
-        $student = Student::findOrFail($studentId);
+        $student = User::findOrFail($studentId);
 
         $this->existingStudent = $student;
         $this->student_id = $student->id;
@@ -101,9 +94,6 @@ class Create extends Component
         $this->searchResults = [];   // on ferme la liste
     }
 
-    // =====================
-    // NAVIGATION
-    // =====================
     public function nextStep()
     {
         $this->step++;
@@ -113,10 +103,11 @@ class Create extends Component
     {
         $this->step--;
     }
+    public function setExistingStundent(){
+        // $this->reset();
+        return $this->existingStudent=null;
+    }
 
-    // =====================
-    // DYNAMIQUE faculté → département → promotion
-    // =====================
     public function updatedFacultyId($value)
     {
         $this->departments = Department::where('faculty_id', $value)->orderBy('name')->get()->toArray();
@@ -131,26 +122,26 @@ class Create extends Component
         $this->promotion_id = null;
     }
 
-    // =====================
-    // SAVE
-    // =====================
+
     public function save()
     {
-        $this->validate([
-            'academic_year_id' => 'required',
-            'faculty_id' => 'required',
-            'department_id' => 'required',
-            'promotion_id' => 'required',
-            'registration_date' => 'required|date',
-        ]);
+        if ($this->isNewStudent) {
+            $this->validate([
+                'matricule' => 'required|string|max:50|unique:users,matricule',
+                'name' => 'required|string|max:255',
+                'genre' => 'required|string|max:2',
+                'telephone' => 'required|string|max:50|unique:users,telephone',
+                'email' => 'required|email|max:255|unique:users,email',
+                'date_naissance' => 'required|date',
+                'adresse' => 'required|string|max:255',
+            ]);
+        }
 
         DB::transaction(function () {
             if ($this->isNewStudent) {
-                $student = Student::create([
+                $student = User::create([
                     'matricule' => $this->matricule,
-                    'nom' => $this->nom,
-                    'postnom' => $this->postnom,
-                    'prenom' => $this->prenom,
+                    'name' => $this->name,
                     'genre' => $this->genre,
                     'telephone' => $this->telephone,
                     'email' => $this->email,
@@ -159,9 +150,8 @@ class Create extends Component
                 ]);
                 $this->student_id = $student->id;
             }
-
             Enrollment::create([
-                'student_id' => $this->student_id,
+                'user_id' => $this->student_id,
                 'academic_year_id' => $this->academic_year_id,
                 'faculty_id' => $this->faculty_id,
                 'department_id' => $this->department_id,
@@ -169,6 +159,7 @@ class Create extends Component
                 'registration_date' => $this->registration_date,
                 'status' => 'active',
             ]);
+            $student->assignRole('student');
         });
 
         $this->reset();
@@ -183,7 +174,7 @@ class Create extends Component
             'academicYears' => AcademicYear::all(),
             'faculties' => Faculty::orderBy('name')->get(),
             'enrollments' => Enrollment::with([
-                'student',
+                'user',
                 'academicYear',
                 'faculty',
                 'department',

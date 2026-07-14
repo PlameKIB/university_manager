@@ -15,7 +15,7 @@
             </p>
         </div>
 
-        <a href="" class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
+        <a href="{{ route('enrollment.create') }}" class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
                   text-white rounded-xl font-semibold text-sm transition shadow-sm">
             <i class="fa-solid fa-plus"></i>
             Nouvelle inscription
@@ -187,22 +187,19 @@
                                                         flex items-center justify-center flex-shrink-0">
 
                                         <span class="text-indigo-600 font-bold text-sm">
-                                            {{ strtoupper(substr($inscription->student->nom, 0, 1)) }}
-                                            {{ strtoupper(substr($inscription->student->prenom ?? '', 0, 1)) }}
+                                            {{ strtoupper(substr($inscription->user->name, 0, 1)) }}
                                         </span>
 
                                     </div>
 
                                     <div>
                                         <div class="font-semibold text-gray-800 dark:text-white text-sm">
-                                            {{ $inscription->student->nom }}
-                                            {{ $inscription->student->postnom }}
-                                            {{ $inscription->student->prenom }}
+                                            {{ $inscription->user->name }}
                                         </div>
 
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                             <i class="fa-solid fa-phone mr-1"></i>
-                                            {{ $inscription->student->telephone ?? 'Aucun numéro' }}
+                                            {{ $inscription->user->telephone ?? 'Aucun numéro' }}
                                         </div>
                                     </div>
 
@@ -216,7 +213,7 @@
                                                      bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200
                                                      text-xs font-semibold">
                                     <i class="fa-solid fa-id-card"></i>
-                                    {{ $inscription->student->matricule }}
+                                    {{ $inscription->user->matricule }}
                                 </span>
                             </td>
 
@@ -257,6 +254,12 @@
                                                       dark:bg-amber-900/20 dark:hover:bg-amber-900/40
                                                       flex items-center justify-center text-amber-600 transition">
                                         <i class="fa-solid fa-pen text-sm"></i>
+                                    </a>
+
+                                    <a href="{{ route('releve.show', $inscription->id) }}" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100
+                                                      dark:bg-green-900/20 dark:hover:bg-green-900/40
+                                                      flex items-center justify-center text-green-600 transition">
+                                        <i class="fa-solid fa-print text-sm"></i>
                                     </a>
 
                                     <button wire:click="delete({{ $inscription->id }})"

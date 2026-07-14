@@ -109,14 +109,14 @@
                                                     flex items-center justify-center flex-shrink-0
                                                     group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-colors">
                                             <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">
-                                                {{ strtoupper(substr($result['nom'], 0, 1)) }}{{ strtoupper(substr($result['prenom'] ?? '', 0, 1)) }}
+                                                {{ strtoupper(substr($result['name'], 0, 1)) }}{{ strtoupper(substr($result['name'] ?? '', 0, 1)) }}
                                             </span>
                                         </div>
 
                                         {{-- Infos --}}
                                         <div class="flex-1 min-w-0">
                                             <div class="font-semibold text-gray-800 dark:text-white text-sm truncate">
-                                                {{ $result['nom'] }} {{ $result['postnom'] }} {{ $result['prenom'] }}
+                                                {{ $result['name'] }}
                                             </div>
                                             <div class="flex items-center gap-3 mt-0.5">
                                                 <span class="text-xs text-gray-500 dark:text-gray-400">
@@ -157,11 +157,11 @@
                                         Étudiant sélectionné
                                     </p>
                                     <p class="font-bold text-gray-800 dark:text-white">
-                                        {{ $existingStudent->nom }} {{ $existingStudent->postnom }} {{ $existingStudent->prenom }}
+                                        {{ $existingStudent->name}} 
                                     </p>
                                     <div class="flex items-center gap-4 mt-1.5 text-sm text-gray-500 dark:text-gray-400">
                                         <span><i class="fa-solid fa-id-card mr-1.5"></i>{{ $existingStudent->matricule }}</span>
-                                        @if($existingStudent->telephone)
+                                        @if($existingStudent->telephone) 
                                             <span><i class="fa-solid fa-phone mr-1.5"></i>{{ $existingStudent->telephone }}</span>
                                         @endif
                                     </div>
@@ -169,7 +169,7 @@
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
                                 <button
-                                    wire:click="$set('existingStudent', null)"
+                                    wire:click="setExistingStundent()"
                                     class="px-3 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400
                                            dark:hover:text-white bg-white dark:bg-gray-800 border border-gray-200
                                            dark:border-gray-600 rounded-lg transition"
@@ -201,12 +201,11 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach([
-                                ['model' => 'matricule', 'placeholder' => 'Matricule', 'type' => 'text', 'icon' => 'fa-id-card'],
-                                ['model' => 'nom',       'placeholder' => 'Nom',       'type' => 'text', 'icon' => 'fa-user'],
-                                ['model' => 'postnom',   'placeholder' => 'Postnom',   'type' => 'text', 'icon' => 'fa-user'],
-                                ['model' => 'prenom',    'placeholder' => 'Prénom',    'type' => 'text', 'icon' => 'fa-user'],
+                                ['model' => 'name',       'placeholder' => 'Nom',       'type' => 'text', 'icon' => 'fa-user'],
                                 ['model' => 'telephone', 'placeholder' => 'Téléphone', 'type' => 'text', 'icon' => 'fa-phone'],
                                 ['model' => 'email',     'placeholder' => 'Email',     'type' => 'email','icon' => 'fa-envelope'],
+                                ['model' => 'Adresse',    'placeholder' => 'Adresse',    'type' => 'text', 'icon' => 'fa-user'],
+
                                 ['model' => 'adresse',   'placeholder' => 'Adresse',   'type' => 'text', 'icon' => 'fa-location-dot'],
                             ] as $field)
                                 <div class="relative">
@@ -413,7 +412,7 @@
                     </div>
                     @if($existingStudent)
                         <p class="font-bold text-gray-800 dark:text-white">
-                            {{ $existingStudent->nom }} {{ $existingStudent->postnom }} {{ $existingStudent->prenom }}
+                            {{ $existingStudent->name }}
                         </p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
                             <i class="fa-solid fa-id-card mr-2"></i>{{ $existingStudent->matricule }}
@@ -424,7 +423,7 @@
                             </p>
                         @endif
                     @else
-                        <p class="font-bold text-gray-800 dark:text-white">{{ $nom }} {{ $postnom }} {{ $prenom }}</p>
+                        <p class="font-bold text-gray-800 dark:text-white">{{ $name }}</p>
                         <p class="text-sm text-gray-500 dark:text-gray-400">
                             <i class="fa-solid fa-id-card mr-2"></i>{{ $matricule }}
                         </p>

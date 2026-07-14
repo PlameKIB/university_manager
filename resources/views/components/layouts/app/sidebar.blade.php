@@ -29,6 +29,20 @@
                     Inscription
                 </flux:navlist.item>
 
+                {{-- Payment --}}
+                <flux:navlist.item icon="credit-card" :href="route('admin.payments')"
+                    :current="request()->routeIs('admin.payments')" wire:navigate>
+                    Paiements
+                </flux:navlist.item>
+
+                {{-- MENU COTATION (ENSEIGNANT UNIQUEMENT) --}}
+                @hasanyrole('enseignant|admin')
+                <flux:navlist.item icon="clipboard-document-check" :href="route('cotation.index')"
+                    :current="request()->routeIs('cotation.*')" wire:navigate>
+                    Mes cours à coter
+                </flux:navlist.item>
+                @endhasanyrole
+
                 {{-- MENU INSCRIPTIONS --}}
                 <flux:navlist.group expandable collapsed heading="Inscriptions" icon="document-text">
 
@@ -63,10 +77,26 @@
 
                 </flux:navlist.group>
 
+                {{-- MENU COURS / COTATION (ADMIN) --}}
+                <flux:navlist.group expandable collapsed heading="Cours" icon="book-open">
+
+                    <flux:navlist.item icon="book-open" :href="route('admin.course')"
+                        :current="request()->routeIs('admin.course')" wire:navigate>
+                        Catalogue des cours
+                    </flux:navlist.item>
+
+                    <flux:navlist.item icon="link" :href="route('admin.course_assignment')"
+                        :current="request()->routeIs('admin.course_assignment')" wire:navigate>
+                        Attributions (enseignant / promotion)
+                    </flux:navlist.item>
+
+                </flux:navlist.group>
+
                 {{-- MENU PARAMETRES --}}
                 <flux:navlist.group expandable collapsed heading="Paramètres" icon="cog-6-tooth">
 
-                    <flux:navlist.item icon="building-office" icon:class="text-bg-dark" :href="route('admin.faculty')" wire:navigate>
+                    <flux:navlist.item icon="building-office" icon:class="text-bg-dark" :href="route('admin.faculty')"
+                        wire:navigate>
                         Faculté
                     </flux:navlist.item>
 
@@ -82,25 +112,27 @@
                         Promotion
                     </flux:navlist.item>
 
+                    <flux:navlist.item icon="currency-dollar" :href="route('admin.fee')" wire:navigate>
+                        Frais academiques
+                    </flux:navlist.item>
+
+                </flux:navlist.group>
+
+                {{-- Teachers --}}
+                <flux:navlist.group expandable collapsed heading="Enseignants" icon="user">
+
+                    <flux:navlist.item icon="user-plus" :href="route('admin.teacher.create')" wire:navigate>
+                        Nouvel enseignant
+                    </flux:navlist.item>
+
                 </flux:navlist.group>
 
             </flux:navlist.group>
 
+
         </flux:navlist>
         <flux:spacer />
 
-        <!-- <flux:navlist variant="outline">
-            <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                Repository
-            </flux:navlist.item>
-
-            <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                Documentation
-            </flux:navlist.item>
-        </flux:navlist> -->
-
-        <!-- Desktop User Menu -->
         <flux:dropdown position="bottom" align="start">
             <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                 icon-trailing="chevrons-up-down" />

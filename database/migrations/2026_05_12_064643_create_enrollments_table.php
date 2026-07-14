@@ -12,7 +12,7 @@ return new class extends Migration {
     {
         Schema::create('enrollments', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('student_id')
+            $table->foreignId('user_id')
                 ->constrained()
                 ->cascadeOnDelete();
 
@@ -41,7 +41,7 @@ return new class extends Migration {
                 'suspended'
             ])->default('active');
             $table->unique([
-                'student_id',
+                'user_id',
                 'academic_year_id'
             ]);
             $table->timestamps();

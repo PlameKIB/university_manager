@@ -11,4 +11,12 @@ class Promotion extends Model
     {
         return $this->belongsTo(Department::class);
     }
+     public function courseAssignments()
+    {
+        return $this->hasMany(CourseAssignment::class);
+    }
+    public function enrollments()
+    {
+        return $this->hasMany(Enrollment::class);
+    }
 }

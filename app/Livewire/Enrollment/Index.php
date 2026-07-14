@@ -61,7 +61,7 @@ class Index extends Component
     {
         $query = Enrollment::query()
             ->with([
-                'student',
+                'user',
                 'faculty',
                 'promotion',
                 'academicYear',
@@ -69,11 +69,10 @@ class Index extends Component
 
             ->when($this->search, function ($q) {
 
-                $q->whereHas('student', function ($student) {
+                $q->whereHas('user', function ($user) {
 
-                    $student->where('nom', 'like', '%' . $this->search . '%')
-                        ->orWhere('postnom', 'like', '%' . $this->search . '%')
-                        ->orWhere('prenom', 'like', '%' . $this->search . '%')
+                    $user->where('name', 'like', '%' . $this->search . '%')
+                        ->orWhere('email', 'like', '%' . $this->search . '%')
                         ->orWhere('matricule', 'like', '%' . $this->search . '%')
                         ->orWhere('telephone', 'like', '%' . $this->search . '%');
                 });

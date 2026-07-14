@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Student;
 
-use App\Models\Student;
+use App\Models\User;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -24,20 +24,14 @@ class Index extends Component
         'search' => ['except' => ''],
     ];
 
-    // =========================
-    // RESET PAGINATION
-    // =========================
     public function updatingSearch()
     {
         $this->resetPage();
     }
 
-    // =========================
-    // DELETE
-    // =========================
     public function delete($id)
     {
-        $student = Student::findOrFail($id);
+        $student = User::findOrFail($id);
 
         $student->delete();
 
@@ -47,12 +41,9 @@ class Index extends Component
         );
     }
 
-    // =========================
-    // RENDER
-    // =========================
     public function render()
     {
-        $students = Student::query()
+        $students = User::query()
 
             ->when($this->search, function ($query) {
 
@@ -71,11 +62,9 @@ class Index extends Component
             'students' => $students,
 
             // STATS
-            'totalStudents' => Student::count(),
+            'totalStudents' => User::role('student')->count(),
 
-            'maleStudents' => Student::where('genre', 'M')->count(),
-
-            'femaleStudents' => Student::where('genre', 'F')->count(),
+            'maleStudents' => User::role('student')->where('genre', 'M')->count(),
 
         ]);
     }

@@ -90,7 +90,7 @@
                     </p>
 
                     <h3 class="text-2xl font-bold text-pink-600 mt-1">
-                        {{ $femaleStudents }}
+                        {{ $totalStudents - $maleStudents }}
                     </h3>
                 </div>
 
@@ -191,8 +191,7 @@
                                                     flex items-center justify-center flex-shrink-0">
 
                                         <span class="text-indigo-600 font-bold text-sm">
-                                            {{ strtoupper(substr($student->nom, 0, 1)) }}
-                                            {{ strtoupper(substr($student->prenom ?? '', 0, 1)) }}
+                                            {{ strtoupper(substr($student->name, 0, 1)) }}
                                         </span>
 
                                     </div>
@@ -200,9 +199,7 @@
                                     <div>
 
                                         <div class="font-semibold text-gray-800 dark:text-white text-sm">
-                                            {{ $student->nom }}
-                                            {{ $student->postnom }}
-                                            {{ $student->prenom }}
+                                            {{ $student->name }}
                                         </div>
 
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
@@ -291,7 +288,7 @@
                                     </a>
 
                                     {{-- EDIT --}}
-                                    <a href="{{ route('student.edit', $student) }}" class="w-9 h-9 rounded-lg bg-amber-50 hover:bg-amber-100
+                                    <a href="{{ route('student.edit', $student->id) }}" class="w-9 h-9 rounded-lg bg-amber-50 hover:bg-amber-100
                                                   dark:bg-amber-900/20 dark:hover:bg-amber-900/40
                                                   flex items-center justify-center text-amber-600 transition">
 
