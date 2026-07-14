@@ -2,91 +2,54 @@
 
 namespace App\Livewire\Student;
 
-use App\Models\Student;
+use App\Models\User;
+use Livewire\Attributes\Rule;
 use Livewire\Component;
 
 class Create extends Component
 {
-    // =========================
-    // FORM FIELDS
-    // =========================
-    public $matricule;
+  
 
-    public $nom;
-
-    public $postnom;
-
-    public $prenom;
-
-    public $telephone;
-
-    public $email;
-
-    public $adresse;
-
+    #[Rule('required|string|min:3', as: 'Nom complet')]
+    public $name;
+    #[Rule('required|string|max:50', as: 'Genre')]
     public $genre;
-
+    #[Rule('required|string|max:50', as: 'telephone')]
+    public $telephone;
+    #[Rule('required|email|max:50', as: 'G-mail')]
+    public $email;
+    #[Rule('required|string|max:50', as: 'Adresse')]
+    public $adresse;
+    #[Rule('required|date', as: 'Date de naissance')]
     public $date_naissance;
 
-    // =========================
-    // RULES
-    // =========================
-    protected function rules()
-    {
-        return [
-
-            'matricule' => 'required|string|max:50|unique:students,matricule',
-
-            'nom' => 'required|string|max:255',
-
-            'postnom' => 'nullable|string|max:255',
-
-            'prenom' => 'nullable|string|max:255',
-
-            'telephone' => 'nullable|string|max:30',
-
-            'email' => 'nullable|email|max:255',
-
-            'adresse' => 'nullable|string|max:255',
-
-            'genre' => 'nullable|in:M,F',
-
-            'date_naissance' => 'nullable|date',
-        ];
-    }
-
-    // =========================
-    // SAVE
-    // =========================
     public function save()
     {
         $this->validate();
 
-        Student::create([
+        $user = User::create([
 
-            'matricule'      => $this->matricule,
-            'nom'            => $this->nom,
-            'postnom'        => $this->postnom,
-            'prenom'         => $this->prenom,
-            'telephone'      => $this->telephone,
-            'email'          => $this->email,
-            'adresse'        => $this->adresse,
-            'genre'          => $this->genre,
+            'matricule' => $this->genereMatricule(),
+            'name' => $this->name,
+            'telephone' => $this->telephone,
+            'email' => $this->email,
+            'adresse' => $this->adresse,
+            'genre' => $this->genre,
             'date_naissance' => $this->date_naissance,
 
         ]);
-
-        session()->flash(
-            'success',
-            'Étudiant créé avec succès.'
-        );
+        $user->assignRole('student');
 
         return redirect()->route('student.index');
     }
 
-    // =========================
-    // RENDER
-    // =========================
+    public function genereMatricule()
+    {
+        $lastStudent = User::role('student')->latest('id')->first();
+        $lastId = $lastStudent ? $lastStudent->id : 0;
+        $newId = $lastId + 1;
+        return 'ETU' . str_pad($newId, 4, '0', STR_PAD_LEFT);
+    }
     public function render()
     {
         return view('livewire.student.create');

@@ -49,21 +49,18 @@
                     <div class="w-14 h-14 rounded-full bg-indigo-100 dark:bg-indigo-900/30
                                 flex items-center justify-center flex-shrink-0">
                         <span class="text-indigo-600 font-bold text-lg">
-                            {{ strtoupper(substr($payment->enrollment->student->nom, 0, 1)) }}
-                            {{ strtoupper(substr($payment->enrollment->student->prenom ?? '', 0, 1)) }}
+                            {{ strtoupper(substr($payment->enrollment->user->name, 0, 1)) }}
                         </span>
                     </div>
 
                     <div class="flex-1">
                         <div class="font-semibold text-gray-800 dark:text-white text-base">
-                            {{ $payment->enrollment->student->nom }}
-                            {{ $payment->enrollment->student->postnom }}
-                            {{ $payment->enrollment->student->prenom }}
+                            {{ $payment->enrollment->user->name }}
                         </div>
 
                         <div class="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-gray-500 dark:text-gray-400 mt-2">
-                            <span><i class="fa-solid fa-id-card mr-1"></i>{{ $payment->enrollment->student->matricule }}</span>
-                            <span><i class="fa-solid fa-phone mr-1"></i>{{ $payment->enrollment->student->telephone ?? 'Aucun numéro' }}</span>
+                            <span><i class="fa-solid fa-id-card mr-1"></i>{{ $payment->enrollment->user->matricule }}</span>
+                            <span><i class="fa-solid fa-phone mr-1"></i>{{ $payment->enrollment->user->telephone ?? 'Aucun numéro' }}</span>
                         </div>
                     </div>
 

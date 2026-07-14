@@ -20,17 +20,17 @@
         <div class="flex items-center gap-4">
             <div class="w-12 h-12 rounded-xl bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center flex-shrink-0">
                 <span class="text-indigo-600 dark:text-indigo-400 font-bold text-lg">
-                    {{ strtoupper(substr($enrollment->student->nom, 0, 1)) }}{{ strtoupper(substr($enrollment->student->prenom ?? '', 0, 1)) }}
+                    {{ strtoupper(substr($enrollment->user->name, 0, 1)) }}
                 </span>
             </div>
             <div class="flex-1">
                 <p class="font-bold text-gray-800 dark:text-white">
-                    {{ $enrollment->student->nom }} {{ $enrollment->student->postnom }} {{ $enrollment->student->prenom }}
+                    {{ $enrollment->user->name }}
                 </p>
                 <div class="flex items-center gap-4 mt-1 text-sm text-gray-500 dark:text-gray-400">
-                    <span><i class="fa-solid fa-id-card mr-1.5"></i>{{ $enrollment->student->matricule }}</span>
-                    @if($enrollment->student->telephone)
-                        <span><i class="fa-solid fa-phone mr-1.5"></i>{{ $enrollment->student->telephone }}</span>
+                    <span><i class="fa-solid fa-id-card mr-1.5"></i>{{ $enrollment->user->matricule }}</span>
+                    @if($enrollment->user->telephone)
+                        <span><i class="fa-solid fa-phone mr-1.5"></i>{{ $enrollment->user->telephone }}</span>
                     @endif
                 </div>
             </div>

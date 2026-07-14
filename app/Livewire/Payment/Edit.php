@@ -29,7 +29,7 @@ class Edit extends Component
 
     public function mount(Payment $payment)
     {
-        $payment->load(['enrollment.student', 'enrollment.faculty', 'enrollment.promotion', 'enrollment.academicYear', 'items']);
+        $payment->load(['enrollment.user', 'enrollment.faculty', 'enrollment.promotion', 'enrollment.academicYear', 'items']);
 
         $this->payment = $payment;
         $this->selectedEnrollment = $payment->enrollment;
@@ -58,11 +58,12 @@ class Edit extends Component
         }
 
         return Enrollment::query()
-            ->with(['student', 'faculty', 'promotion', 'academicYear'])
-            ->whereHas('student', function ($q) {
-                $q->where('nom', 'like', "%{$this->studentSearch}%")
-                    ->orWhere('prenom', 'like', "%{$this->studentSearch}%")
-                    ->orWhere('matricule', 'like', "%{$this->studentSearch}%");
+            ->with(['user', 'faculty', 'promotion', 'academicYear'])
+            ->whereHas('user', function ($q) {
+                $q->where('name', 'like', "%{$this->studentSearch}%")
+                    ->orWhere('matricule', 'like', "%{$this->studentSearch}%")
+                    ->orWhere('gmail', 'like', "%{$this->studentSearch}%");
+
             })
             ->latest()
             ->limit(8)
@@ -81,7 +82,7 @@ class Edit extends Component
 
     public function selectEnrollment($enrollmentId)
     {
-        $this->selectedEnrollment = Enrollment::with(['student', 'faculty', 'promotion', 'academicYear'])
+        $this->selectedEnrollment = Enrollment::with(['user', 'faculty', 'promotion', 'academicYear'])
             ->findOrFail($enrollmentId);
 
         $this->studentSearch = '';
@@ -190,6 +191,11 @@ class Edit extends Component
 
     public function render()
     {
-        return view('livewire.payment.edit');
+
+        return view('livewire.payment.edit',[
+            'totalAmount' => $this->getTotalAmountProperty(),
+            'enrollmentResults' => $this->getEnrollmentResultsProperty(),
+            'fees' => Fee::orderBy('name')->get(),
+        ]);
     }
 }

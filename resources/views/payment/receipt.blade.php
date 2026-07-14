@@ -174,14 +174,12 @@
             <div class="row">
                 <span class="label">Étudiant</span>
                 <span class="value">
-                    {{ $payment->enrollment->student->nom }}
-                    {{ $payment->enrollment->student->postnom }}
-                    {{ $payment->enrollment->student->prenom }}
+                    {{ $payment->enrollment->user->name }}
                 </span>
             </div>
             <div class="row">
                 <span class="label">Matricule</span>
-                <span class="value">{{ $payment->enrollment->student->matricule }}</span>
+                <span class="value">{{ $payment->enrollment->user->matricule }}</span>
             </div>
             <div class="row">
                 <span class="label">Filière</span>

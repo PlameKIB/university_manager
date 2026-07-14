@@ -41,8 +41,7 @@
                         flex items-center justify-center">
 
                 <span class="text-indigo-600 font-bold text-lg">
-                    {{ strtoupper(substr($nom, 0, 1)) }}
-                    {{ strtoupper(substr($prenom ?? '', 0, 1)) }}
+                    {{ strtoupper(substr($name, 0, 1)) }}
                 </span>
 
             </div>
@@ -50,12 +49,9 @@
             <div>
 
                 <h3 class="text-lg font-bold text-gray-800 dark:text-white">
-                    {{ $nom }} {{ $postnom }} {{ $prenom }}
+                    {{ $name}}
                 </h3>
 
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">
-                    Matricule : {{ $matricule }}
-                </p>
 
             </div>
 
@@ -67,33 +63,10 @@
             {{-- GRID --}}
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
 
-                {{-- MATRICULE --}}
-                <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Matricule
-                    </label>
-
-                    <div class="relative">
-
-                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                            <i class="fa-solid fa-id-card text-gray-400 text-sm"></i>
-                        </div>
-
-                        <input type="text" wire:model="matricule" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-
-                    </div>
-
-                    @error('matricule')
-                        <p class="text-xs text-red-500">{{ $message }}</p>
-                    @enderror
-                </div>
-
                 {{-- NOM --}}
                 <div class="space-y-2">
                     <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Nom
+                        Noms
                     </label>
 
                     <div class="relative">
@@ -102,37 +75,15 @@
                             <i class="fa-solid fa-user text-gray-400 text-sm"></i>
                         </div>
 
-                        <input type="text" wire:model="nom" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
+                        <input type="text" wire:model="name" class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
                                    bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
                                    focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
 
                     </div>
 
-                    @error('nom')
+                    @error('name')
                         <p class="text-xs text-red-500">{{ $message }}</p>
                     @enderror
-                </div>
-
-                {{-- POSTNOM --}}
-                <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Postnom
-                    </label>
-
-                    <input type="text" wire:model="postnom" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                               focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
-                </div>
-
-                {{-- PRENOM --}}
-                <div class="space-y-2">
-                    <label class="text-sm font-semibold text-gray-700 dark:text-gray-300">
-                        Prénom
-                    </label>
-
-                    <input type="text" wire:model="prenom" class="w-full px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                               focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                 </div>
 
                 {{-- TELEPHONE --}}

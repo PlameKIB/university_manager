@@ -35,10 +35,10 @@ class Create extends Component
         }
 
         return Enrollment::query()
-            ->with(['student', 'faculty', 'promotion', 'academicYear'])
-            ->whereHas('student', function ($q) {
-                $q->where('nom', 'like', "%{$this->studentSearch}%")
-                    ->orWhere('prenom', 'like', "%{$this->studentSearch}%")
+            ->with(['user', 'faculty', 'promotion', 'academicYear'])
+            ->whereHas('user', function ($q) {
+                $q->where('name', 'like', "%{$this->studentSearch}%")
+                    // ->orWhere('gmail', 'like', "%{$this->studentSearch}%")
                     ->orWhere('matricule', 'like', "%{$this->studentSearch}%");
             })
             ->latest()
@@ -58,7 +58,7 @@ class Create extends Component
 
     public function selectEnrollment($enrollmentId)
     {
-        $this->selectedEnrollment = Enrollment::with(['student', 'faculty', 'promotion', 'academicYear'])
+        $this->selectedEnrollment = Enrollment::with(['user', 'faculty', 'promotion', 'academicYear'])
             ->findOrFail($enrollmentId);
 
         $this->studentSearch = '';
@@ -152,10 +152,11 @@ class Create extends Component
         });
 
         $this->dispatch('success', message: 'Paiement enregistré avec succès.');
-        $this->redirect(back()); 
+        $this->redirect(route('payment.index'));
     }
     public function render()
     {
+        $this->receipt_number = $this->generateReceiptNumber(); // Regenerate receipt number on each render
         return view('livewire.payment.create', [
             'totalAmount' => $this->getTotalAmountProperty(),
             'enrollmentResults' => $this->getEnrollmentResultsProperty(),

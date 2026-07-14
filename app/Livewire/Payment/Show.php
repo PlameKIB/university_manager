@@ -12,7 +12,7 @@ class Show extends Component
     public function mount(Payment $payment)
     {
         $this->payment = $payment->load([
-            'enrollment.student',
+            'enrollment.user',
             'enrollment.faculty',
             'enrollment.promotion',
             'enrollment.academicYear',

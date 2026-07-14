@@ -23,7 +23,7 @@
                     Dashboard
                 </flux:navlist.item>
 
-                   {{-- Inscription rapide --}}
+                {{-- Inscription rapide --}}
                 <flux:navlist.item icon="identification" :href="route('enrollment.create')"
                     :current="request()->routeIs('enrollment.create')" wire:navigate>
                     Inscription
@@ -72,7 +72,8 @@
                 {{-- MENU PARAMETRES --}}
                 <flux:navlist.group expandable collapsed heading="Paramètres" icon="cog-6-tooth">
 
-                    <flux:navlist.item icon="building-office" icon:class="text-bg-dark" :href="route('admin.faculty')" wire:navigate>
+                    <flux:navlist.item icon="building-office" icon:class="text-bg-dark" :href="route('admin.faculty')"
+                        wire:navigate>
                         Faculté
                     </flux:navlist.item>
 
@@ -88,29 +89,29 @@
                         Promotion
                     </flux:navlist.item>
 
-                       <flux:navlist.item icon="currency-dollar" :href="route('admin.fee')" wire:navigate>
+                    <flux:navlist.item icon="currency-dollar" :href="route('admin.fee')" wire:navigate>
                         Frais academiques
                     </flux:navlist.item>
+
+                </flux:navlist.group>
+                <!-- Teachers -->
+                <flux:navlist.group expandable collapsed heading="Enseignants" icon="user">
+
+                    
+
+                    <flux:navlist.item icon="user-plus" :href="route('admin.teacher.create')" wire:navigate>
+                        Nouvel enseignant
+                    </flux:navlist.item>
+
 
                 </flux:navlist.group>
 
             </flux:navlist.group>
 
+
         </flux:navlist>
         <flux:spacer />
 
-        <!-- <flux:navlist variant="outline">
-            <flux:navlist.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit"
-                target="_blank">
-                Repository
-            </flux:navlist.item>
-
-            <flux:navlist.item icon="book-open-text" href="https://laravel.com/docs/starter-kits" target="_blank">
-                Documentation
-            </flux:navlist.item>
-        </flux:navlist> -->
-
-        <!-- Desktop User Menu -->
         <flux:dropdown position="bottom" align="start">
             <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                 icon-trailing="chevrons-up-down" />

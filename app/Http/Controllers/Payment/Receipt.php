@@ -11,7 +11,7 @@ class Receipt extends Controller
     public function __invoke(Payment $payment)
     {
         $payment->load([
-            'enrollment.student',
+            'enrollment.user',
             'enrollment.faculty',
             'enrollment.promotion',
             'enrollment.academicYear',

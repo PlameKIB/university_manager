@@ -49,7 +49,7 @@
                             </div>
 
                             <input type="text" wire:model.live.debounce.300ms="studentSearch"
-                                placeholder="Nom, prénom ou matricule..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
+                                placeholder="Nom ou matricule..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
                                        bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
                                        focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                         </div>
@@ -67,16 +67,16 @@
                                         <div class="w-9 h-9 rounded-full bg-indigo-100 dark:bg-indigo-900/30
                                                     flex items-center justify-center flex-shrink-0">
                                             <span class="text-indigo-600 font-bold text-xs">
-                                                {{ strtoupper(substr($enrollment->student->nom, 0, 1)) }}
+                                                {{ strtoupper(substr($enrollment->user->name, 0, 1)) }}
                                             </span>
                                         </div>
 
                                         <div>
                                             <div class="text-sm font-semibold text-gray-800 dark:text-white">
-                                                {{ $enrollment->student->nom }} {{ $enrollment->student->prenom }}
+                                                {{ $enrollment->user->name }}
                                             </div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">
-                                                {{ $enrollment->student->matricule }} ·
+                                                {{ $enrollment->user->matricule }} ·
                                                 {{ $enrollment->faculty->name ?? '--' }} ·
                                                 {{ $enrollment->academicYear->name ?? '--' }}
                                             </div>
@@ -102,19 +102,16 @@
                                 <div class="w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center
                                             flex-shrink-0">
                                     <span class="text-white font-bold text-sm">
-                                        {{ strtoupper(substr($selectedEnrollment->student->nom, 0, 1)) }}
-                                        {{ strtoupper(substr($selectedEnrollment->student->prenom ?? '', 0, 1)) }}
+                                        {{ strtoupper(substr($selectedEnrollment->user->name, 0, 1)) }}
                                     </span>
                                 </div>
 
                                 <div>
                                     <div class="font-semibold text-gray-800 dark:text-white text-sm">
-                                        {{ $selectedEnrollment->student->nom }}
-                                        {{ $selectedEnrollment->student->postnom }}
-                                        {{ $selectedEnrollment->student->prenom }}
+                                        {{ $selectedEnrollment->user->name }}
                                     </div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                        {{ $selectedEnrollment->student->matricule }} ·
+                                        {{ $selectedEnrollment->user->matricule }} ·
                                         {{ $selectedEnrollment->faculty->name ?? '--' }} ·
                                         {{ $selectedEnrollment->promotion->name ?? '--' }} ·
                                         {{ $selectedEnrollment->academicYear->name ?? '--' }}

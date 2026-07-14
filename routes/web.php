@@ -32,7 +32,7 @@ Route::get('/Inscriptions/{enrollment}/edit', Enrollement_Edit::class)->name('en
 // Students
 Route::get('/Etudiants/all', Student_Index::class)->name('student.index')->middleware('auth');
 Route::get('/Etudiants/create', App\Livewire\Student\Create::class)->name('student.create')->middleware('auth');
-Route::get('/Etudiants/{student:matricule}/edit', Students_Edit::class)->name('student.edit')->middleware('auth');
+Route::get('/Etudiants/{user}/edit', Students_Edit::class)->name('student.edit')->middleware('auth');
 // Route::get('/Inscriptions', Enrollment_Index::class)->name('enrollment.index')->middleware('auth');
 
 
@@ -46,6 +46,11 @@ Route::prefix('admin')->group(function () {
     Route::get('/payments/create', App\Livewire\Payment\Create::class)->name('payment.create');
     Route::get('/payments/{payment}', App\Livewire\Payment\Show::class)->name('payment.show');
     Route::get('/payments/{payment}/receipt', App\Http\Controllers\Payment\Receipt::class)->name('payment.receipt');
+
+    // Teacher
+    // Route::get('/teachers', App\Livewire\Teacher\Index::class)->name('admin.teachers');
+    Route::get('/teachers/create', App\Livewire\Teacher\Create::class)->name('admin.teacher.create');
+    Route::get('/teachers/{teacher}/edit', App\Livewire\Teacher\Create::class)->name('admin.teacher.edit');
 
 
 })->middleware('auth');

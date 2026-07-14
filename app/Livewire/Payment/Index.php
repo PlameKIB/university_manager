@@ -25,7 +25,7 @@ class Index extends Component
     public function render()
     {
         $payments = Payment::query()
-            ->with(['enrollment.student', 'enrollment.faculty', 'enrollment.promotion', 'items.fee'])
+            ->with(['enrollment.user', 'enrollment.faculty', 'enrollment.promotion', 'items.fee'])
             ->when($this->search, function ($q) {
                 $q->where('receipt_number', 'like', "%{$this->search}%")
                     ->orWhereHas('enrollment.student', function ($q) {

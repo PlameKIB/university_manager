@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class Enrollment extends Model
 {
     protected $fillable = [
-        'student_id',
+        'user_id',
         'academic_year_id',
         'faculty_id',
         'department_id',
@@ -16,9 +16,9 @@ class Enrollment extends Model
         'status'
     ];
 
-    public function student()
+    public function user()
     {
-        return $this->belongsTo(Student::class);
+        return $this->belongsTo(User::class);
     }
 
     public function academicYear()

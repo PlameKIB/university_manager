@@ -102,19 +102,16 @@
                                 <div class="w-11 h-11 rounded-full bg-indigo-600 flex items-center justify-center
                                             flex-shrink-0">
                                     <span class="text-white font-bold text-sm">
-                                        {{ strtoupper(substr($selectedEnrollment->student->nom, 0, 1)) }}
-                                        {{ strtoupper(substr($selectedEnrollment->student->prenom ?? '', 0, 1)) }}
+                                        {{ strtoupper(substr($selectedEnrollment->user->name, 0, 1)) }}
                                     </span>
                                 </div>
 
                                 <div>
                                     <div class="font-semibold text-gray-800 dark:text-white text-sm">
-                                        {{ $selectedEnrollment->student->nom }}
-                                        {{ $selectedEnrollment->student->postnom }}
-                                        {{ $selectedEnrollment->student->prenom }}
+                                        {{ $selectedEnrollment->user->name }}
                                     </div>
                                     <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
-                                        {{ $selectedEnrollment->student->matricule }} ·
+                                        {{ $selectedEnrollment->user->matricule }} ·
                                         {{ $selectedEnrollment->faculty->name ?? '--' }} ·
                                         {{ $selectedEnrollment->promotion->name ?? '--' }} ·
                                         {{ $selectedEnrollment->academicYear->name ?? '--' }}

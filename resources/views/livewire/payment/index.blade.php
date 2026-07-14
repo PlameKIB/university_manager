@@ -207,22 +207,19 @@
                                                         flex items-center justify-center flex-shrink-0">
 
                                         <span class="text-indigo-600 font-bold text-sm">
-                                            {{ strtoupper(substr($payment->enrollment->student->nom, 0, 1)) }}
-                                            {{ strtoupper(substr($payment->enrollment->student->prenom ?? '', 0, 1)) }}
+                                            {{ strtoupper(substr($payment->enrollment->user->name, 0, 1)) }}
                                         </span>
 
                                     </div>
 
                                     <div>
                                         <div class="font-semibold text-gray-800 dark:text-white text-sm">
-                                            {{ $payment->enrollment->student->nom }}
-                                            {{ $payment->enrollment->student->postnom }}
-                                            {{ $payment->enrollment->student->prenom }}
+                                            {{ $payment->enrollment->user->name }}
                                         </div>
 
                                         <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
                                             <i class="fa-solid fa-id-card mr-1"></i>
-                                            {{ $payment->enrollment->student->matricule }}
+                                            {{ $payment->enrollment->user->matricule }}
                                         </div>
                                     </div>
 

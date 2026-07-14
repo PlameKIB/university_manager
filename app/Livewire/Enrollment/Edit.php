@@ -115,6 +115,7 @@ class Edit extends Component
         ]);
 
         $this->dispatch('success', message: 'Inscription modifiée avec succès.');
+        $this->redirect(route('enrollment.index'));
     }
 
     public function render()
