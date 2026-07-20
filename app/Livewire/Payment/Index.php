@@ -28,7 +28,7 @@ class Index extends Component
             ->with(['enrollment.user', 'enrollment.faculty', 'enrollment.promotion', 'items.fee'])
             ->when($this->search, function ($q) {
                 $q->where('receipt_number', 'like', "%{$this->search}%")
-                    ->orWhereHas('enrollment.student', function ($q) {
+                    ->orWhereHas('enrollment.user', function ($q) {
                         $q->where('nom', 'like', "%{$this->search}%")
                             ->orWhere('prenom', 'like', "%{$this->search}%")
                             ->orWhere('matricule', 'like', "%{$this->search}%");
