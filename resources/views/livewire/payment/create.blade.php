@@ -60,7 +60,7 @@
                                         dark:border-gray-700 rounded-xl shadow-lg max-h-64 overflow-y-auto">
 
                                 @foreach($enrollmentResults as $enrollment)
-                                    <button type="button" wire:click="selectEnrollment({{ $enrollment->id }})" class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-900/40
+                                    <button type="button" wire:click="selectEnrollment({{ $enrollment->user_id }})" class="w-full text-left px-4 py-3 hover:bg-gray-50 dark:hover:bg-gray-900/40
                                                    flex items-center gap-3 transition border-b border-gray-50
                                                    dark:border-gray-700 last:border-0">
 

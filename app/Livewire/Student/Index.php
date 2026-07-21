@@ -43,29 +43,25 @@ class Index extends Component
 
     public function render()
     {
-        $students = User::query()
+        $query = User::query()
+            ->role('student')
+            ->when($this->search, function ($q) {
+                $q->where(function ($q) {
+                    $q->where('users.name', 'like', '%' . $this->search . '%')
+                        ->orWhere('users.matricule', 'like', '%' . $this->search . '%')
+                        ->orWhere('users.email', 'like', '%' . $this->search . '%')
+                        ->orWhere('users.telephone', 'like', '%' . $this->search . '%');
+                });
+            });
 
-            ->when($this->search, function ($query) {
-
-                $query->where('nom', 'like', '%' . $this->search . '%')
-                    ->orWhere('postnom', 'like', '%' . $this->search . '%')
-                    ->orWhere('prenom', 'like', '%' . $this->search . '%')
-                    ->orWhere('matricule', 'like', '%' . $this->search . '%')
-                    ->orWhere('telephone', 'like', '%' . $this->search . '%');
-            })
-
-            ->latest()
-            ->paginate(10);
-
+        $students = $query->latest('users.created_at')->paginate(10);
         return view('livewire.student.index', [
-
             'students' => $students,
 
             // STATS
             'totalStudents' => User::role('student')->count(),
-
             'maleStudents' => User::role('student')->where('genre', 'M')->count(),
-
+            'femaleStudents' => User::role('student')->where('genre', 'F')->count(),
         ]);
     }
 }

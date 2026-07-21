@@ -6,6 +6,7 @@ use App\Models\Enrollment;
 use App\Models\Fee;
 use App\Models\Payment;
 use App\Models\PaymentItem;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Livewire\Component;
 
@@ -34,12 +35,13 @@ class Create extends Component
             return collect();
         }
 
+        // Chercher les inscriptions avec les étudiants qui matchent la recherche
         return Enrollment::query()
             ->with(['user', 'faculty', 'promotion', 'academicYear'])
             ->whereHas('user', function ($q) {
                 $q->where('name', 'like', "%{$this->studentSearch}%")
-                    // ->orWhere('gmail', 'like', "%{$this->studentSearch}%")
-                    ->orWhere('matricule', 'like', "%{$this->studentSearch}%");
+                    ->orWhere('matricule', 'like', "%{$this->studentSearch}%")
+                    ->orWhere('email', 'like', "%{$this->studentSearch}%");
             })
             ->latest()
             ->limit(8)
@@ -56,10 +58,21 @@ class Create extends Component
         return collect($this->items)->sum(fn($item) => (float) ($item['amount'] ?? 0));
     }
 
-    public function selectEnrollment($enrollmentId)
+    public function selectEnrollment($studentId)
     {
-        $this->selectedEnrollment = Enrollment::with(['user', 'faculty', 'promotion', 'academicYear'])
-            ->findOrFail($enrollmentId);
+        // Chercher l'inscription active (la plus récente) de l'étudiant
+        $enrollment = Enrollment::where('user_id', $studentId)
+            ->with(['user', 'faculty', 'promotion', 'academicYear'])
+            ->where('status', 'active')  // Optionnel: filtre par statut actif
+            ->latest()
+            ->first();
+
+        if ($enrollment) {
+            $this->selectedEnrollment = $enrollment;
+        } else {
+            $this->dispatch('error', message: 'Cet étudiant n\'a pas d\'inscription active.');
+            return;
+        }
 
         $this->studentSearch = '';
     }
@@ -132,13 +145,12 @@ class Create extends Component
         }
 
         $this->validate();
-        $payment = null; // Initialize the payment variable
         DB::transaction(function () {
             $payment = Payment::create([
                 'enrollment_id' => $this->selectedEnrollment->id,
                 'receipt_number' => $this->receipt_number,
                 'payment_date' => $this->payment_date,
-                'total_amount' => $this->totalAmount,
+                'total_amount' => $this->getTotalAmountProperty(),
                 'note' => $this->note,
             ]);
 
