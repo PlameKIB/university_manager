@@ -9,6 +9,7 @@ use App\Models\Faculty;
 use App\Models\Promotion;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 use Livewire\Component;
 
 class Create extends Component
@@ -43,11 +44,63 @@ class Create extends Component
     public $departments = [];
     public $promotions = [];
 
+    // =====================
+    // REGLES DE VALIDATION CENTRALISEES
+    // =====================
+
+    protected function rulesStudent(): array
+    {
+        return [
+            'matricule'      => 'required|string|max:50|unique:users,matricule',
+            'name'           => 'required|string|max:255',
+            'genre'          => 'required|in:M,F',
+            'telephone'      => 'required|string|max:50|unique:users,telephone',
+            'email'          => 'required|email|max:255|unique:users,email',
+            'date_naissance' => 'required|date|before:today',
+            'adresse'        => 'required|string|max:255',
+        ];
+    }
+
+    protected function rulesAcademic(): array
+    {
+        return [
+            'academic_year_id'  => 'required|exists:academic_years,id',
+            'faculty_id'        => 'required|exists:faculties,id',
+            'department_id'     => 'required|exists:departments,id',
+            'promotion_id'      => 'required|exists:promotions,id',
+            'registration_date' => 'required|date',
+        ];
+    }
+
+    protected function attributeNames(): array
+    {
+        return [
+            'matricule'          => 'matricule',
+            'name'               => 'nom',
+            'genre'              => 'genre',
+            'telephone'          => 'téléphone',
+            'email'              => 'email',
+            'date_naissance'     => 'date de naissance',
+            'adresse'            => 'adresse',
+            'academic_year_id'   => 'année académique',
+            'faculty_id'         => 'faculté',
+            'department_id'      => 'département',
+            'promotion_id'       => 'promotion',
+            'registration_date'  => "date d'inscription",
+            'student_id'         => 'étudiant',
+        ];
+    }
+
+    // =====================
+    // RECHERCHE / SELECTION ETUDIANT
+    // =====================
+
     public function updatedSearch($value)
     {
         $this->existingStudent = null;
         $this->isNewStudent = false;
         $this->searchResults = [];
+        $this->resetErrorBag('search');
 
         if (blank($this->search)) {
             return;
@@ -82,6 +135,8 @@ class Create extends Component
         $this->isNewStudent = true;
         $this->searchResults = [];
         $this->existingStudent = null;
+        $this->student_id = null;
+        $this->resetErrorBag();
     }
 
     public function selectStudent(int $studentId)
@@ -92,22 +147,68 @@ class Create extends Component
         $this->student_id = $student->id;
         $this->isNewStudent = false;
         $this->searchResults = [];
-    }
-
-    public function nextStep()
-    {
-        $this->step++;
-    }
-
-    public function previousStep()
-    {
-        $this->step--;
+        $this->resetErrorBag();
     }
 
     public function resetExistingStudent()
     {
         $this->existingStudent = null;
+        $this->student_id = null;
+        $this->isNewStudent = false;
+        $this->search = '';
+        $this->searchResults = [];
     }
+
+    // =====================
+    // NAVIGATION AVEC VALIDATION PAR ETAPE
+    // =====================
+
+    public function nextStep()
+    {
+        if ($this->step === 1) {
+            $this->validateStep1();
+        } elseif ($this->step === 2) {
+            $this->validateStep2();
+        }
+
+        $this->resetErrorBag();
+        $this->step++;
+    }
+
+    public function previousStep()
+    {
+        $this->resetErrorBag();
+        $this->step--;
+    }
+
+    protected function validateStep1(): void
+    {
+        // Aucun choix fait : ni étudiant existant sélectionné, ni "nouvel étudiant"
+        if (!$this->isNewStudent && !$this->existingStudent) {
+            throw ValidationException::withMessages([
+                'search' => "Veuillez sélectionner un étudiant existant ou cliquer sur « Nouvel étudiant ».",
+            ]);
+        }
+
+        if ($this->isNewStudent) {
+            $this->validate($this->rulesStudent(), [], $this->attributeNames());
+        } else {
+            $this->validate(
+                ['student_id' => 'required|exists:users,id'],
+                [],
+                $this->attributeNames()
+            );
+        }
+    }
+
+    protected function validateStep2(): void
+    {
+        $this->validate($this->rulesAcademic(), [], $this->attributeNames());
+    }
+
+    // =====================
+    // CASCADES FACULTE > DEPARTEMENT > PROMOTION
+    // =====================
 
     public function updatedFacultyId($value)
     {
@@ -123,60 +224,80 @@ class Create extends Component
         $this->promotion_id = null;
     }
 
-    public function save()
-    {
-        $this->validate([
-            'academic_year_id' => 'required|exists:academic_years,id',
-            'faculty_id' => 'required|exists:faculties,id',
-            'department_id' => 'required|exists:departments,id',
-            'promotion_id' => 'required|exists:promotions,id',
-            'registration_date' => 'required|date',
-        ]);
+    // =====================
+    // VALIDATION EN TEMPS REEL (au fur et a mesure de la saisie)
+    // =====================
 
-        if ($this->isNewStudent) {
-            $this->validate([
-                'matricule' => 'required|string|max:50|unique:users,matricule',
-                'name' => 'required|string|max:255',
-                'genre' => 'required|string|max:2',
-                'telephone' => 'required|string|max:50|unique:users,telephone',
-                'email' => 'required|email|max:255|unique:users,email',
-                'date_naissance' => 'required|date',
-                'adresse' => 'required|string|max:255',
-            ]);
-        } else {
-            $this->validate([
-                'student_id' => 'required|exists:users,id',
-            ]);
+    public function updated($propertyName)
+    {
+        $studentRules = $this->rulesStudent();
+        $academicRules = $this->rulesAcademic();
+
+        if (array_key_exists($propertyName, $studentRules)) {
+            $this->validateOnly($propertyName, $studentRules, [], $this->attributeNames());
         }
 
-        DB::transaction(function () {
-            if ($this->isNewStudent) {
-                $student = User::create([
-                    'matricule' => $this->matricule,
-                    'name' => $this->name,
-                    'genre' => $this->genre,
-                    'telephone' => $this->telephone,
-                    'email' => $this->email,
-                    'date_naissance' => $this->date_naissance,
-                    'adresse' => $this->adresse,
+        if (array_key_exists($propertyName, $academicRules)) {
+            $this->validateOnly($propertyName, $academicRules, [], $this->attributeNames());
+        }
+    }
+
+    // =====================
+    // ENREGISTREMENT FINAL
+    // =====================
+
+    public function save()
+    {
+        // On revalide tout, y compris les étapes précédentes,
+        // au cas où l'utilisateur serait revenu en arrière et aurait modifié des données.
+        $this->validate($this->rulesAcademic(), [], $this->attributeNames());
+
+        if ($this->isNewStudent) {
+            $this->validate($this->rulesStudent(), [], $this->attributeNames());
+        } else {
+            $this->validate(
+                ['student_id' => 'required|exists:users,id'],
+                [],
+                $this->attributeNames()
+            );
+        }
+
+        try {
+            DB::transaction(function () {
+                if ($this->isNewStudent) {
+                    $student = User::create([
+                        'matricule' => $this->matricule,
+                        'name' => $this->name,
+                        'genre' => $this->genre,
+                        'telephone' => $this->telephone,
+                        'email' => $this->email,
+                        'date_naissance' => $this->date_naissance,
+                        'adresse' => $this->adresse,
+                    ]);
+                    $this->student_id = $student->id;
+                } else {
+                    $student = User::findOrFail($this->student_id);
+                }
+
+                Enrollment::create([
+                    'user_id' => $this->student_id,
+                    'academic_year_id' => $this->academic_year_id,
+                    'faculty_id' => $this->faculty_id,
+                    'department_id' => $this->department_id,
+                    'promotion_id' => $this->promotion_id,
+                    'registration_date' => $this->registration_date,
+                    'status' => 'active',
                 ]);
-                $this->student_id = $student->id;
-            } else {
-                $student = User::findOrFail($this->student_id);
-            }
 
-            Enrollment::create([
-                'user_id' => $this->student_id,
-                'academic_year_id' => $this->academic_year_id,
-                'faculty_id' => $this->faculty_id,
-                'department_id' => $this->department_id,
-                'promotion_id' => $this->promotion_id,
-                'registration_date' => $this->registration_date,
-                'status' => 'active',
-            ]);
+                $student->assignRole('student');
+            });
+        } catch (\Throwable $e) {
+            report($e);
 
-            $student->assignRole('student');
-        });
+            $this->dispatch('error', message: "Une erreur est survenue lors de l'enregistrement. Veuillez réessayer.");
+
+            return;
+        }
 
         $this->reset();
         $this->step = 1;

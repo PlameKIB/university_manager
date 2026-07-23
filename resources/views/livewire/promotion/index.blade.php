@@ -162,6 +162,14 @@
 
                         <td class="px-6 py-4 text-right space-x-2">
 
+                            <a href="{{ route('documents.palmares', $promotion->id) }}" target="_blank"
+                                title="Générer le palmarès (PDF)"
+                                class="text-purple-600 hover:text-purple-800 dark:text-purple-400 dark:hover:text-purple-300 text-sm font-medium cursor-pointer">
+
+                                <i class="fa-solid fa-ranking-star"></i>
+
+                            </a>
+
                             <button wire:click="edit({{ $promotion->id }})"
                                 class="text-indigo-600 hover:text-indigo-800 dark:text-indigo-400 dark:hover:text-indigo-300 text-sm font-medium cursor-pointer">
 

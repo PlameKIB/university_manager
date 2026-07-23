@@ -127,6 +127,14 @@
 
                 </flux:navlist.group>
 
+                {{-- MENU UTILISATEURS / ROLES (ADMIN UNIQUEMENT) --}}
+                @role('admin')
+                <flux:navlist.item icon="user-circle" :href="route('admin.users')"
+                    :current="request()->routeIs('admin.users')" wire:navigate>
+                    Utilisateurs &amp; rôles
+                </flux:navlist.item>
+                @endrole
+
             </flux:navlist.group>
 
 
