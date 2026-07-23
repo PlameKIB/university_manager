@@ -256,10 +256,22 @@
                                         <i class="fa-solid fa-pen text-sm"></i>
                                     </a>
 
-                                    <a href="{{ route('releve.show', $inscription->id) }}" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100
+                                    <a href="{{ route('releve.show', $inscription->id) }}" target="_blank" title="Relevé de notes (PDF)" class="w-9 h-9 rounded-lg bg-green-50 hover:bg-green-100
                                                       dark:bg-green-900/20 dark:hover:bg-green-900/40
                                                       flex items-center justify-center text-green-600 transition">
                                         <i class="fa-solid fa-print text-sm"></i>
+                                    </a>
+
+                                    <a href="{{ route('documents.attestation_frequentation', $inscription->id) }}" target="_blank" title="Attestation de fréquentation" class="w-9 h-9 rounded-lg bg-sky-50 hover:bg-sky-100
+                                                      dark:bg-sky-900/20 dark:hover:bg-sky-900/40
+                                                      flex items-center justify-center text-sky-600 transition">
+                                        <i class="fa-solid fa-file-shield text-sm"></i>
+                                    </a>
+
+                                    <a href="{{ route('documents.attestation_reussite', $inscription->id) }}" target="_blank" title="Attestation de réussite" class="w-9 h-9 rounded-lg bg-purple-50 hover:bg-purple-100
+                                                      dark:bg-purple-900/20 dark:hover:bg-purple-900/40
+                                                      flex items-center justify-center text-purple-600 transition">
+                                        <i class="fa-solid fa-award text-sm"></i>
                                     </a>
 
                                     <button wire:click="delete({{ $inscription->id }})"

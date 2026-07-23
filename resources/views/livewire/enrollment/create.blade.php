@@ -48,6 +48,23 @@
         </div>
     </div>
 
+    {{-- RESUME DES ERREURS (visible sur toutes les étapes) --}}
+    @if ($errors->any())
+        <div class="rounded-xl border border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-900/20 p-4 flex items-start gap-3">
+            <i class="fa-solid fa-circle-exclamation text-red-500 mt-0.5"></i>
+            <div>
+                <p class="font-semibold text-red-700 dark:text-red-400 text-sm mb-1">
+                    Merci de corriger {{ $errors->count() > 1 ? 'les erreurs suivantes' : "l'erreur suivante" }} :
+                </p>
+                <ul class="list-disc list-inside text-sm text-red-600 dark:text-red-400 space-y-0.5">
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endif
+
     {{-- ======================== STEP 1 ======================== --}}
     @if($step == 1)
         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
@@ -61,28 +78,34 @@
             <div class="p-6 space-y-5">
 
                 {{-- BARRE DE RECHERCHE --}}
-                <div class="flex gap-3">
-                    <div class="relative flex-1">
-                        <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                            <i class="fa-solid fa-search text-gray-400 text-sm"></i>
+                <div>
+                    <div class="flex gap-3">
+                        <div class="relative flex-1">
+                            <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                                <i class="fa-solid fa-search text-gray-400 text-sm"></i>
+                            </div>
+                            <input type="text" wire:model.live.debounce.300ms="search"
+                                placeholder="Rechercher par matricule, nom ou téléphone..."
+                                class="w-full pl-11 pr-4 py-3 rounded-xl border bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm focus:ring-2 focus:border-transparent placeholder-gray-400 transition
+                                       @error('search') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror">
                         </div>
-                     <input type="text" wire:model.live.debounce.300ms="search" placeholder="Rechercher par matricule, nom ou téléphone..." class="w-full pl-11 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600 bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm focus:ring-2 focus:ring-indigo-500 focus:border-transparent placeholder-gray-400 transition">
-
+                        <button
+                            wire:click="setIsNewStudent"
+                            wire:loading.attr="disabled"
+                            class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
+                                   disabled:opacity-60 text-white rounded-xl font-semibold text-sm transition shadow-sm">
+                            <span wire:loading.remove wire:target="setIsNewStudent">
+                                <i class="fa-solid fa-user-plus"></i>
+                            </span>
+                            <span wire:loading wire:target="setIsNewStudent">
+                                <i class="fa-solid fa-circle-notch fa-spin"></i>
+                            </span>
+                            Nouvel étudiant
+                        </button>
                     </div>
-                    <button
-                        wire:click="setIsNewStudent"
-                        wire:loading.attr="disabled"
-                        class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
-                               disabled:opacity-60 text-white rounded-xl font-semibold text-sm transition shadow-sm">
-                        <span wire:loading.remove wire:target="setIsNewStudent">
-                            <!-- <i class="fa-solid fa-magnifying-glass"></i> -->
-                             <i class="fa-solid fa-user-plus"></i>
-                        </span>
-                        <span wire:loading wire:target="setIsNewStudent">
-                            <i class="fa-solid fa-circle-notch fa-spin"></i>
-                        </span>
-                        Nouvel étudiant
-                    </button>
+                    @error('search')
+                        <p class="text-xs text-red-500 mt-1.5">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- LISTE DES RÉSULTATS --}}
@@ -109,7 +132,7 @@
                                                     flex items-center justify-center flex-shrink-0
                                                     group-hover:bg-indigo-200 dark:group-hover:bg-indigo-800/50 transition-colors">
                                             <span class="text-indigo-600 dark:text-indigo-400 font-bold text-sm">
-                                                {{ strtoupper(substr($result['name'], 0, 1)) }}{{ strtoupper(substr($result['name'] ?? '', 0, 1)) }}
+                                                {{ strtoupper(substr($result['name'] ?? '', 0, 1)) }}
                                             </span>
                                         </div>
 
@@ -157,11 +180,11 @@
                                         Étudiant sélectionné
                                     </p>
                                     <p class="font-bold text-gray-800 dark:text-white">
-                                        {{ $existingStudent->name}} 
+                                        {{ $existingStudent->name }}
                                     </p>
                                     <div class="flex items-center gap-4 mt-1.5 text-sm text-gray-500 dark:text-gray-400">
                                         <span><i class="fa-solid fa-id-card mr-1.5"></i>{{ $existingStudent->matricule }}</span>
-                                        @if($existingStudent->telephone) 
+                                        @if($existingStudent->telephone)
                                             <span><i class="fa-solid fa-phone mr-1.5"></i>{{ $existingStudent->telephone }}</span>
                                         @endif
                                     </div>
@@ -169,7 +192,7 @@
                             </div>
                             <div class="flex items-center gap-2 flex-shrink-0">
                                 <button
-                                    wire:click="setExistingStundent()"
+                                    wire:click="resetExistingStudent"
                                     class="px-3 py-2 text-xs font-medium text-gray-500 hover:text-gray-700 dark:text-gray-400
                                            dark:hover:text-white bg-white dark:bg-gray-800 border border-gray-200
                                            dark:border-gray-600 rounded-lg transition"
@@ -201,62 +224,84 @@
 
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                             @foreach([
-                                ['model' => 'name',       'placeholder' => 'Nom',       'type' => 'text', 'icon' => 'fa-user'],
-                                ['model' => 'telephone', 'placeholder' => 'Téléphone', 'type' => 'text', 'icon' => 'fa-phone'],
-                                ['model' => 'email',     'placeholder' => 'Email',     'type' => 'email','icon' => 'fa-envelope'],
-                                ['model' => 'Adresse',    'placeholder' => 'Adresse',    'type' => 'text', 'icon' => 'fa-user'],
-
-                                ['model' => 'adresse',   'placeholder' => 'Adresse',   'type' => 'text', 'icon' => 'fa-location-dot'],
+                                ['model' => 'matricule', 'placeholder' => 'Matricule', 'type' => 'text',  'icon' => 'fa-id-card'],
+                                ['model' => 'name',      'placeholder' => 'Nom',       'type' => 'text',  'icon' => 'fa-user'],
+                                ['model' => 'telephone', 'placeholder' => 'Téléphone', 'type' => 'text',  'icon' => 'fa-phone'],
+                                ['model' => 'email',     'placeholder' => 'Email',     'type' => 'email', 'icon' => 'fa-envelope'],
+                                ['model' => 'adresse',   'placeholder' => 'Adresse',   'type' => 'text',  'icon' => 'fa-location-dot'],
                             ] as $field)
-                                <div class="relative">
-                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                        <i class="fa-solid {{ $field['icon'] }} text-gray-400 text-sm"></i>
+                                <div>
+                                    <div class="relative">
+                                        <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                            <i class="fa-solid {{ $field['icon'] }} text-gray-400 text-sm"></i>
+                                        </div>
+                                        <input
+                                            type="{{ $field['type'] }}"
+                                            wire:model.live="{{ $field['model'] }}"
+                                            placeholder="{{ $field['placeholder'] }}"
+                                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition
+                                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                                   focus:ring-2 focus:border-transparent
+                                                   @error($field['model']) border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror"
+                                        >
                                     </div>
-                                    <input
-                                        type="{{ $field['type'] }}"
-                                        wire:model="{{ $field['model'] }}"
-                                        placeholder="{{ $field['placeholder'] }}"
-                                        class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                               focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                                    >
+                                    @error($field['model'])
+                                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                    @enderror
                                 </div>
                             @endforeach
 
-                            {{-- Genre + Date side by side --}}
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                    <i class="fa-solid fa-venus-mars text-gray-400 text-sm"></i>
+                            {{-- Genre --}}
+                            <div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-venus-mars text-gray-400 text-sm"></i>
+                                    </div>
+                                    <select wire:model.live="genre"
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition appearance-none
+                                               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                               focus:ring-2 focus:border-transparent
+                                               @error('genre') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror">
+                                        <option value="">Genre</option>
+                                        <option value="M">Masculin</option>
+                                        <option value="F">Féminin</option>
+                                    </select>
                                 </div>
-                                <select wire:model="genre"
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                           bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                           focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition appearance-none">
-                                    <option value="">Genre</option>
-                                    <option value="M">Masculin</option>
-                                    <option value="F">Féminin</option>
-                                </select>
+                                @error('genre')
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
-                            <div class="relative">
-                                <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
-                                    <i class="fa-solid fa-calendar text-gray-400 text-sm"></i>
+
+                            {{-- Date de naissance --}}
+                            <div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
+                                        <i class="fa-solid fa-calendar text-gray-400 text-sm"></i>
+                                    </div>
+                                    <input
+                                        type="date"
+                                        wire:model.live="date_naissance"
+                                        class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition
+                                               bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                               focus:ring-2 focus:border-transparent
+                                               @error('date_naissance') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror"
+                                    >
                                 </div>
-                                <input
-                                    type="date"
-                                    wire:model="date_naissance"
-                                    class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                           bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                           focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
-                                >
+                                @error('date_naissance')
+                                    <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                                @enderror
                             </div>
                         </div>
 
                         <div class="flex justify-end">
                             <button wire:click="nextStep"
+                                wire:loading.attr="disabled"
                                 class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
-                                       text-white rounded-xl font-semibold text-sm transition shadow-sm">
-                                Continuer
-                                <i class="fa-solid fa-arrow-right text-xs"></i>
+                                       disabled:opacity-60 text-white rounded-xl font-semibold text-sm transition shadow-sm">
+                                <span wire:loading.remove wire:target="nextStep">Continuer</span>
+                                <span wire:loading wire:target="nextStep">Vérification…</span>
+                                <i class="fa-solid fa-arrow-right text-xs" wire:loading.remove wire:target="nextStep"></i>
+                                <i class="fa-solid fa-circle-notch fa-spin" wire:loading wire:target="nextStep"></i>
                             </button>
                         </div>
                     </div>
@@ -279,56 +324,66 @@
             <div class="p-6 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
 
                 {{-- Année académique --}}
-                <div class="space-y-1.5">
+                <div>
                     <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Année académique</label>
-                    <div class="relative">
+                    <div class="relative mt-1.5">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fa-solid fa-calendar-days text-gray-400 text-sm"></i>
                         </div>
                         <select wire:model.live="academic_year_id"
-                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition appearance-none">
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition appearance-none
+                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                   focus:ring-2 focus:border-transparent
+                                   @error('academic_year_id') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror">
                             <option value="">Sélectionner…</option>
                             @foreach($academicYears as $year)
                                 <option value="{{ $year->id }}">{{ $year->name }}</option>
                             @endforeach
                         </select>
                     </div>
+                    @error('academic_year_id')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Faculté --}}
-                <div class="space-y-1.5">
+                <div>
                     <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Faculté</label>
-                    <div class="relative">
+                    <div class="relative mt-1.5">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fa-solid fa-building-columns text-gray-400 text-sm"></i>
                         </div>
                         <select wire:model.live="faculty_id"
-                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition appearance-none">
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition appearance-none
+                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                   focus:ring-2 focus:border-transparent
+                                   @error('faculty_id') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror">
                             <option value="">Sélectionner…</option>
                             @foreach($faculties as $faculty)
                                 <option value="{{ $faculty->id }}">{{ $faculty->name }}</option>
                             @endforeach
                         </select>
                     </div>
+                    @error('faculty_id')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Département --}}
-                <div class="space-y-1.5">
+                <div>
                     <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Département</label>
-                    <div class="relative">
+                    <div class="relative mt-1.5">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fa-solid fa-sitemap text-gray-400 text-sm"></i>
                         </div>
                         <select wire:model.live="department_id"
-                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-sm transition appearance-none
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition appearance-none
+                                   bg-gray-50 dark:bg-gray-900
+                                   focus:ring-2 focus:border-transparent
                                    {{ count($departments) === 0
-                                       ? 'text-gray-400 cursor-not-allowed'
-                                       : 'text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent' }}"
+                                       ? 'text-gray-400 cursor-not-allowed border-gray-200 dark:border-gray-600'
+                                       : 'text-gray-800 dark:text-white' }}
+                                   @error('department_id') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror"
                             {{ count($departments) === 0 ? 'disabled' : '' }}>
                             <option value="">{{ count($departments) === 0 ? 'Choisir une faculté d\'abord' : 'Sélectionner…' }}</option>
                             @foreach($departments as $dept)
@@ -336,21 +391,26 @@
                             @endforeach
                         </select>
                     </div>
+                    @error('department_id')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Promotion --}}
-                <div class="space-y-1.5">
+                <div>
                     <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Promotion</label>
-                    <div class="relative">
+                    <div class="relative mt-1.5">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fa-solid fa-layer-group text-gray-400 text-sm"></i>
                         </div>
                         <select wire:model.live="promotion_id"
-                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-sm transition appearance-none
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition appearance-none
+                                   bg-gray-50 dark:bg-gray-900
+                                   focus:ring-2 focus:border-transparent
                                    {{ count($promotions) === 0
-                                       ? 'text-gray-400 cursor-not-allowed'
-                                       : 'text-gray-800 dark:text-white focus:ring-2 focus:ring-indigo-500 focus:border-transparent' }}"
+                                       ? 'text-gray-400 cursor-not-allowed border-gray-200 dark:border-gray-600'
+                                       : 'text-gray-800 dark:text-white' }}
+                                   @error('promotion_id') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror"
                             {{ count($promotions) === 0 ? 'disabled' : '' }}>
                             <option value="">{{ count($promotions) === 0 ? 'Choisir un département d\'abord' : 'Sélectionner…' }}</option>
                             @foreach($promotions as $promo)
@@ -358,20 +418,27 @@
                             @endforeach
                         </select>
                     </div>
+                    @error('promotion_id')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
                 {{-- Date d'inscription --}}
-                <div class="space-y-1.5">
+                <div>
                     <label class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Date d'inscription</label>
-                    <div class="relative">
+                    <div class="relative mt-1.5">
                         <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none">
                             <i class="fa-solid fa-calendar-check text-gray-400 text-sm"></i>
                         </div>
-                        <input type="date" wire:model="registration_date"
-                            class="w-full pl-10 pr-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
-                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
-                                   focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
+                        <input type="date" wire:model.live="registration_date"
+                            class="w-full pl-10 pr-4 py-3 rounded-xl border text-sm transition
+                                   bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white
+                                   focus:ring-2 focus:border-transparent
+                                   @error('registration_date') border-red-400 focus:ring-red-400 @else border-gray-200 dark:border-gray-600 focus:ring-indigo-500 @enderror">
                     </div>
+                    @error('registration_date')
+                        <p class="text-xs text-red-500 mt-1">{{ $message }}</p>
+                    @enderror
                 </div>
 
             </div>
@@ -384,10 +451,13 @@
                     Retour
                 </button>
                 <button wire:click="nextStep"
+                    wire:loading.attr="disabled"
                     class="inline-flex items-center gap-2 px-5 py-3 bg-indigo-600 hover:bg-indigo-700
-                           text-white rounded-xl font-semibold text-sm transition shadow-sm">
-                    Continuer
-                    <i class="fa-solid fa-arrow-right text-xs"></i>
+                           disabled:opacity-60 text-white rounded-xl font-semibold text-sm transition shadow-sm">
+                    <span wire:loading.remove wire:target="nextStep">Continuer</span>
+                    <span wire:loading wire:target="nextStep">Vérification…</span>
+                    <i class="fa-solid fa-arrow-right text-xs" wire:loading.remove wire:target="nextStep"></i>
+                    <i class="fa-solid fa-circle-notch fa-spin" wire:loading wire:target="nextStep"></i>
                 </button>
             </div>
         </div>
@@ -499,6 +569,19 @@
             title: event.message,
             showConfirmButton: false,
             timer: 3000,
+            background: '#1f2937',
+            color: '#fff'
+        });
+    });
+
+    $wire.on('error', (event) => {
+        Swal.fire({
+            toast: true,
+            position: 'top-end',
+            icon: 'error',
+            title: event.message,
+            showConfirmButton: false,
+            timer: 4000,
             background: '#1f2937',
             color: '#fff'
         });

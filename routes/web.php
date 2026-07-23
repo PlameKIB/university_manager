@@ -28,6 +28,9 @@ Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+// VERIFICATION PUBLIQUE D'AUTHENTICITE DES DOCUMENTS (accessible sans connexion, via QR code)
+Route::get('/verify/{code}', App\Http\Controllers\Documents\Verify::class)->name('documents.verify');
+
 
 // APPARITAIRE
 Route::get('/Inscriptions/create', Enrollment_Create::class)->name('enrollment.create')->middleware('auth');
@@ -66,6 +69,21 @@ Route::prefix('admin')->group(function () {
     Route::get('/releve/{enrollment}', App\Http\Controllers\Releve\Show::class)
         ->name('releve.show')
         ->middleware('auth');
+
+    // DOCUMENTS ACADEMIQUES OFFICIELS (PDF + QR DE VERIFICATION)
+    Route::get('/attestation-frequentation/{enrollment}', App\Http\Controllers\Documents\AttestationFrequentation::class)
+        ->name('documents.attestation_frequentation');
+
+    Route::get('/attestation-reussite/{enrollment}', App\Http\Controllers\Documents\AttestationReussite::class)
+        ->name('documents.attestation_reussite');
+
+    Route::get('/palmares/{promotion}/{academicYear?}', App\Http\Controllers\Documents\Palmares::class)
+        ->name('documents.palmares');
+
+    // GESTION DES UTILISATEURS ET DES ROLES (ADMIN UNIQUEMENT)
+    Route::middleware('role:admin')->group(function () {
+        Route::get('/utilisateurs', App\Livewire\Admin\UserManagement::class)->name('admin.users');
+    });
 })->middleware('auth');
 
 Route::prefix('admin.setting')->group(function () {
