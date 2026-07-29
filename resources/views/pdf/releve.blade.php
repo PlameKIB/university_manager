@@ -53,7 +53,7 @@
         <tbody>
             @foreach($lines as $line)
                 <tr>
-                    <td>{{ $line->course->name ?? '--' }}</td>
+                    <td>{{ $line->course->intitule ?? '--' }}</td>
                     <td class="text-center">{{ $line->credit }}</td>
                     <td class="text-center">{{ $line->tp ?? '-' }}</td>
                     <td class="text-center">{{ $line->interro ?? '-' }}</td>

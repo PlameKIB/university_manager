@@ -52,9 +52,8 @@ class Show extends Controller
         $moyenneSur20 = $pourcentageGeneral * 20 / 100;
 
         $mention = match (true) {
-            $pourcentageGeneral >= 80 => 'La Plus Grande Distinction',
-            $pourcentageGeneral >= 70 => 'Grande Distinction',
-            $pourcentageGeneral >= 60 => 'Distinction',
+            $pourcentageGeneral >= 80 => 'Grande Distinction',
+            $pourcentageGeneral >= 70 => 'Distinction',
             $pourcentageGeneral >= 50 => 'Satisfaction',
             default => 'Échec',
         };

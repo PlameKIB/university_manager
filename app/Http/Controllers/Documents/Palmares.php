@@ -58,9 +58,8 @@ class Palmares extends Controller
             $pourcentageGeneral = $totalCredits > 0 ? ($totalPoints / $totalCredits) * 100 : 0;
 
             $mention = match (true) {
-                $pourcentageGeneral >= 80 => 'La Plus Grande Distinction',
-                $pourcentageGeneral >= 70 => 'Grande Distinction',
-                $pourcentageGeneral >= 60 => 'Distinction',
+                $pourcentageGeneral >= 80 => 'Grande Distinction',
+                $pourcentageGeneral >= 70 => 'Distinction',
                 $pourcentageGeneral >= 50 => 'Satisfaction',
                 default => 'Échec',
             };
