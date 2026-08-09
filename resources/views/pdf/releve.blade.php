@@ -8,10 +8,10 @@
 
     @include('pdf.partials.header')
 
-    <div class="doc-title">Relevé de notes</div>
-    <div class="doc-subtitle">Réf. {{ $reference }}</div>
+    <div class="doc-title">Relevé de cotes</div>
+    <div class="doc-subtitle">Référence : {{ $reference }}</div>
 
-    <table class="info-table">
+    <table class="info-table identity-table">
         <tr>
             <td class="label">Étudiant(e)</td>
             <td>{{ $enrollment->user->name ?? '--' }}</td>
@@ -53,7 +53,7 @@
         <tbody>
             @foreach($lines as $line)
                 <tr>
-                    <td>{{ $line->course->name ?? '--' }}</td>
+                    <td>{{ $line->course->intitule ?? '--' }}</td>
                     <td class="text-center">{{ $line->credit }}</td>
                     <td class="text-center">{{ $line->tp ?? '-' }}</td>
                     <td class="text-center">{{ $line->interro ?? '-' }}</td>
@@ -65,28 +65,28 @@
         </tbody>
     </table>
 
-    <table class="info-table" style="margin-top:16px;">
-        <tr>
-            <td class="label">Total des crédits</td>
-            <td>{{ $totalCredits }}</td>
-        </tr>
-        <tr>
-            <td class="label">Moyenne générale</td>
-            <td>{{ $moyenneSur20 }} / 20 &nbsp; ({{ $pourcentageGeneral }}%)</td>
-        </tr>
-        <tr>
-            <td class="label">Mention</td>
-            <td>{{ $mention }}</td>
-        </tr>
-        <tr>
-            <td class="label">Décision</td>
-            <td>
+    <div class="summary-grid">
+        <div class="summary-card">
+            <div class="summary-label">Total des crédits</div>
+            <div class="summary-value">{{ $totalCredits }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Moyenne générale</div>
+            <div class="summary-value">{{ $moyenneSur20 }} / 20</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Mention</div>
+            <div class="summary-value">{{ $mention }}</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-label">Décision</div>
+            <div class="summary-value">
                 <span class="badge {{ $decision === 'ADMIS(E)' ? 'badge-success' : 'badge-danger' }}">
                     {{ $decision }}
                 </span>
-            </td>
-        </tr>
-    </table>
+            </div>
+        </div>
+    </div>
 
     <table class="signature-box">
         <tr>

@@ -117,8 +117,7 @@ class Dashboard extends Component
             ->when($activeYear, fn($q) => $q->where('academic_year_id', $activeYear->id))
             ->get()
             ->map(function ($assignment) {
-                $assignment->students_count = $assignment->promotion
-                    ->enrollments()
+                $assignment->students_count = Enrollment::where('promotion_id', $assignment->promotion_id)
                     ->where('academic_year_id', $assignment->academic_year_id)
                     ->where('status', 'active')
                     ->count();
@@ -225,9 +224,8 @@ class Dashboard extends Component
         $moyenneSur20 = round($pourcentageGeneral * 20 / 100, 2);
 
         $mention = match (true) {
-            $pourcentageGeneral >= 80 => 'La Plus Grande Distinction',
-            $pourcentageGeneral >= 70 => 'Grande Distinction',
-            $pourcentageGeneral >= 60 => 'Distinction',
+            $pourcentageGeneral >= 80 => 'Grande Distinction',
+            $pourcentageGeneral >= 70 => 'Distinction',
             $pourcentageGeneral >= 50 => 'Satisfaction',
             default => 'Échec',
         };

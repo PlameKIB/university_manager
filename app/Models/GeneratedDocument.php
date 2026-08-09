@@ -36,7 +36,7 @@ class GeneratedDocument extends Model
 
     public const TYPES = [
         'recu' => 'Reçu de paiement',
-        'releve' => 'Relevé de notes',
+        'releve' => 'Relevé de Cotes',
         'attestation_frequentation' => 'Attestation de fréquentation',
         'attestation_reussite' => 'Attestation de réussite',
         'palmares' => 'Palmarès de promotion',

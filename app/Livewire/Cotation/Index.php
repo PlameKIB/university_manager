@@ -4,6 +4,7 @@ namespace App\Livewire\Cotation;
 
 use App\Models\AcademicYear;
 use App\Models\CourseAssignment;
+use App\Models\Enrollment;
 use Livewire\Component;
 
 class Index extends Component
@@ -17,8 +18,7 @@ class Index extends Component
             ->when($activeYear, fn($q) => $q->where('academic_year_id', $activeYear->id))
             ->get()
             ->map(function ($assignment) {
-                $assignment->students_count = $assignment->promotion
-                    ->enrollments()
+                $assignment->students_count = Enrollment::where('promotion_id', $assignment->promotion_id)
                     ->where('academic_year_id', $assignment->academic_year_id)
                     ->where('status', 'active')
                     ->count();

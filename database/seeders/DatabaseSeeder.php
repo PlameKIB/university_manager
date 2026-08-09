@@ -25,13 +25,22 @@ class DatabaseSeeder extends Seeder
         Role::firstOrCreate(['name' => 'enseignant']);
         Role::firstOrCreate(['name' => 'student']);
 
-
-        $admin = User::factory()->create([
-            'name' => 'My admin',
-            'email' => 'admin@example.com',
-            'password' => bcrypt('admin@example.com'),
-        ]);
+        $admin = User::firstOrCreate(
+            ['email' => 'admin@example.com'],
+            [
+                'name' => 'My admin',
+                'password' => bcrypt('admin@example.com'),
+            ]
+        );
 
         $admin->assignRole('admin');
+
+        $this->call([
+            AcademicYearSeeder::class,
+            FacultyDepartmentPromotionSeeder::class,
+            CongoleseStudentEnrollmentSeeder::class,
+            TeacherCourseSeeder::class,
+            GradePaymentSeeder::class,
+        ]);
     }
 }

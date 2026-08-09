@@ -13,11 +13,11 @@ class AttestationFrequentation extends Controller
         $enrollment->load(['user', 'faculty', 'department', 'promotion', 'academicYear']);
 
         // On ne délivre une attestation de fréquentation que pour une inscription active
-        if ($enrollment->status !== 'active') {
-            return response()->view('documents.blocked', [
-                'message' => "Une attestation de fréquentation ne peut être délivrée que pour une inscription active.",
-            ]);
-        }
+        // if ($enrollment->status !== 'active') {
+        //     return response()->view('documents.blocked', [
+        //         'message' => "Une attestation de fréquentation ne peut être délivrée que pour une inscription active.",
+        //     ]);
+        // }
 
         $sexe = match ($enrollment->user->genre ?? null) {
             'M' => 'Masculin',

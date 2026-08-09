@@ -14,6 +14,7 @@ return [
     */
 
     'name' => env('APP_NAME', 'University Manager'),
+    'name'=> env('institution', 'Université de l\'Afrique Centrale'),
 
     /*
     |--------------------------------------------------------------------------
