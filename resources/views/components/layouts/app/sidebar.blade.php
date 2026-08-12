@@ -24,16 +24,20 @@
                 </flux:navlist.item>
 
                 {{-- Inscription rapide --}}
+                @hasanyrole('student|admin')
                 <flux:navlist.item icon="identification" :href="route('enrollment.create')"
                     :current="request()->routeIs('enrollment.create')" wire:navigate>
                     Inscription
                 </flux:navlist.item>
+                @endhasanyrole
 
                 {{-- Payment --}}
+                @role('admin')
                 <flux:navlist.item icon="credit-card" :href="route('admin.payments')"
                     :current="request()->routeIs('admin.payments')" wire:navigate>
                     Paiements
                 </flux:navlist.item>
+                @endrole
 
                 {{-- MENU COTATION (ENSEIGNANT UNIQUEMENT) --}}
                 @hasanyrole('enseignant|admin')
@@ -44,6 +48,7 @@
                 @endhasanyrole
 
                 {{-- MENU INSCRIPTIONS --}}
+                @hasanyrole('student|admin')
                 <flux:navlist.group expandable collapsed heading="Inscriptions" icon="document-text">
 
                     <flux:navlist.item icon="list-bullet" :href="route('enrollment.index')"
@@ -61,8 +66,10 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
+                @endhasanyrole
 
                 {{-- MENU ETUDIANTS --}}
+                @role('admin')
                 <flux:navlist.group expandable collapsed heading="Etudiants" icon="users">
 
                     <flux:navlist.item icon="user-group" :href="route('student.index')"
@@ -76,8 +83,10 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
+                @endrole
 
                 {{-- MENU COURS / COTATION (ADMIN) --}}
+                @role('admin')
                 <flux:navlist.group expandable collapsed heading="Cours" icon="book-open">
 
                     <flux:navlist.item icon="book-open" :href="route('admin.course')"
@@ -91,8 +100,10 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
+                @endrole
 
                 {{-- MENU PARAMETRES --}}
+                @role('admin')
                 <flux:navlist.group expandable collapsed heading="Paramètres" icon="cog-6-tooth">
 
                     <flux:navlist.item icon="building-office" icon:class="text-bg-dark" :href="route('admin.faculty')"
@@ -117,8 +128,10 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
+                @endrole
 
                 {{-- Teachers --}}
+                @role('admin')
                 <flux:navlist.group expandable collapsed heading="Enseignants" icon="user">
 
                     <flux:navlist.item icon="user-plus" :href="route('admin.teacher.create')" wire:navigate>
@@ -126,7 +139,8 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
-
+                @endrole
+                
                 {{-- MENU UTILISATEURS / ROLES (ADMIN UNIQUEMENT) --}}
                 @role('admin')
                 <flux:navlist.item icon="user-circle" :href="route('admin.users')"
