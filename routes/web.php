@@ -47,7 +47,7 @@ Route::get('/Etudiants/{user}/edit', Students_Edit::class)->name('student.edit')
 Route::prefix('admin')->group(function () {
 
     // Payment
-    Route::get('/paiements', App\Livewire\Payment\Index::class)->name('admin.payments');
+    Route::get('/paiements', App\Livewire\Payment\Index::class)->name('admin.payments')->middleware('role:admin');
     Route::get('/paiements/{payment}/edit', App\Livewire\Payment\Edit::class)->name('payment.edit');
 
     Route::get('/payments', App\Livewire\Payment\Index::class)->name('payment.index');
@@ -57,8 +57,8 @@ Route::prefix('admin')->group(function () {
 
     // Teacher
     // Route::get('/teachers', App\Livewire\Teacher\Index::class)->name('admin.teachers');
-    Route::get('/teachers/create', App\Livewire\Teacher\Create::class)->name('admin.teacher.create');
-    Route::get('/teachers/{teacher}/edit', App\Livewire\Teacher\Create::class)->name('admin.teacher.edit');
+    Route::get('/teachers/create', App\Livewire\Teacher\Create::class)->name('admin.teacher.create')->middleware('role:admin');
+    Route::get('/teachers/{teacher}/edit', App\Livewire\Teacher\Create::class)->name('admin.teacher.edit')->middleware('role:admin');
 
 
     Route::prefix('enseignant')->middleware(['auth', 'role:enseignant|admin'])->group(function () {
@@ -86,7 +86,7 @@ Route::prefix('admin')->group(function () {
     });
 })->middleware('auth');
 
-Route::prefix('admin.setting')->group(function () {
+Route::prefix('admin.setting')->middleware(['auth', 'role:admin'])->group(function () {
     Route::get('/faculties', Faculty_Index::class)->name('admin.faculty');
     Route::get('/AcademiqueYears', Academ_Year_Index::class)->name('admin.academic_year');
     Route::get('/Departements', Department_Index::class)->name('admin.department');
