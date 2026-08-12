@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Enrollment;
 
+use Illuminate\Support\Facades\Hash;
 use App\Models\AcademicYear;
 use App\Models\Department;
 use App\Models\Enrollment;
@@ -273,6 +274,7 @@ class Create extends Component
                         'email' => $this->email,
                         'date_naissance' => $this->date_naissance,
                         'adresse' => $this->adresse,
+                        'password'=> Hash::make($this->email)
                     ]);
                     $this->student_id = $student->id;
                 } else {
