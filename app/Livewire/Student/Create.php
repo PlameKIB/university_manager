@@ -5,6 +5,8 @@ namespace App\Livewire\Student;
 use App\Models\User;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Illuminate\Support\Facades\Hash;
+
 
 class Create extends Component
 {
@@ -36,6 +38,7 @@ class Create extends Component
             'adresse' => $this->adresse,
             'genre' => $this->genre,
             'date_naissance' => $this->date_naissance,
+            'password'=> Hash::make($this->email)
 
         ]);
         $user->assignRole('student');
