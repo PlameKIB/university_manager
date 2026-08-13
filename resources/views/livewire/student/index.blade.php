@@ -187,14 +187,19 @@
 
                                 <div class="flex items-center gap-4">
 
-                                    <div class="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/30
-                                                    flex items-center justify-center flex-shrink-0">
+                                    @if($student->photo)
+                                        <img src="{{ asset('storage/' . $student->photo) }}" alt="{{ $student->name }}"
+                                             class="w-11 h-11 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800 flex-shrink-0">
+                                    @else
+                                        <div class="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/30
+                                                        flex items-center justify-center flex-shrink-0">
 
-                                        <span class="text-indigo-600 font-bold text-sm">
-                                            {{ strtoupper(substr($student->name, 0, 1)) }}
-                                        </span>
+                                            <span class="text-indigo-600 font-bold text-sm">
+                                                {{ strtoupper(substr($student->name, 0, 1)) }}
+                                            </span>
 
-                                    </div>
+                                        </div>
+                                    @endif
 
                                     <div>
 
