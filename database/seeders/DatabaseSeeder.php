@@ -24,6 +24,8 @@ class DatabaseSeeder extends Seeder
         Role::firstOrCreate(['name' => 'admin']);
         Role::firstOrCreate(['name' => 'enseignant']);
         Role::firstOrCreate(['name' => 'student']);
+        Role::firstOrCreate(['name' => 'apparitaire']);
+        Role::firstOrCreate(['name' => 'caissier']);
 
         $admin = User::firstOrCreate(
             ['email' => 'admin@example.com'],
@@ -34,6 +36,26 @@ class DatabaseSeeder extends Seeder
         );
 
         $admin->assignRole('admin');
+
+        
+ // Apparitaire : gère les inscriptions, les étudiants et les documents académiques
+        $apparitaire = User::firstOrCreate(
+            ['email' => 'apparitaire@example.com'],
+            [
+                'name' => 'Apparitaire',
+                'password' => bcrypt('apparitaire@example.com'),
+            ]
+        );
+        $apparitaire->assignRole('apparitaire');
+        // Caissier : gère les paiements et les soldes des étudiants
+        $caissier = User::firstOrCreate(
+            ['email' => 'caissier@example.com'],
+            [
+                'name' => 'Caissier',
+                'password' => bcrypt('caissier@example.com'),
+            ]
+        );
+        $caissier->assignRole('caissier');
 
         $this->call([
             AcademicYearSeeder::class,

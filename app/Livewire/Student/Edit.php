@@ -6,9 +6,12 @@ use App\Models\Student;
 use App\Models\User;
 use Livewire\Attributes\Rule;
 use Livewire\Component;
+use Livewire\WithFileUploads;
 
 class Edit extends Component
 {
+    use WithFileUploads;
+
     public User $user;
 
     // =========================
@@ -26,6 +29,16 @@ class Edit extends Component
     public $adresse;
     #[Rule('required|date', as: 'Date de naissance')]
     public $date_naissance;
+    
+    // PASSWORD FIELDS
+    #[Rule('nullable|string|min:8|confirmed', as: 'Nouveau mot de passe')]
+    public $password = '';
+    #[Rule('nullable')]
+    public $password_confirmation = '';
+    
+    // PHOTO FIELD
+    #[Rule('nullable|image|max:2048', as: 'Photo de profil')]
+    public $photo = null;
 
     // =========================
     // MOUNT
@@ -40,6 +53,9 @@ class Edit extends Component
         $this->adresse = $user->adresse;
         $this->genre = $user->genre;
         $this->date_naissance = $user->date_naissance;
+        $this->password = '';
+        $this->password_confirmation = '';
+        $this->photo = null;
     }
     // =========================
     // UPDATE
@@ -48,19 +64,45 @@ class Edit extends Component
     {
         $this->validate();
 
-        $this->user->update([
+        $data = [
             'name' => $this->name,
             'telephone' => $this->telephone,
             'email' => $this->email,
             'adresse' => $this->adresse,
             'genre' => $this->genre,
             'date_naissance' => $this->date_naissance,
+        ];
+        
+        // Ajouter le mot de passe s'il est fourni
+        if (!empty($this->password)) {
+            $data['password'] = bcrypt($this->password);
+        }
 
-        ]);
+        // Gérer la photo s'il y en a une
+        if ($this->photo) {
+            // Supprimer l'ancienne photo si elle existe
+            if ($this->user->photo) {
+                \Illuminate\Support\Facades\Storage::disk('public')->delete($this->user->photo);
+            }
+            
+            // Stocker la nouvelle photo
+            $photoPath = $this->photo->store('students', 'public');
+            $data['photo'] = $photoPath;
+        }
+
+        $this->user->update($data);
+
+        $message = 'Informations de l\'étudiant mises à jour avec succès.';
+        if (!empty($this->password)) {
+            $message .= ' Le mot de passe a été modifié.';
+        }
+        if ($this->photo) {
+            $message .= ' La photo a été mise à jour.';
+        }
 
         session()->flash(
             'success',
-            'Informations de l’étudiant mises à jour avec succès.'
+            $message
         );
 
         return redirect()->route('student.index');

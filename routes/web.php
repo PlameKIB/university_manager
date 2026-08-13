@@ -46,14 +46,21 @@ Route::get('/Etudiants/{user}/edit', Students_Edit::class)->name('student.edit')
 
 Route::prefix('admin')->group(function () {
 
-    // Payment
-    Route::get('/paiements', App\Livewire\Payment\Index::class)->name('admin.payments')->middleware('role:admin');
-    Route::get('/paiements/{payment}/edit', App\Livewire\Payment\Edit::class)->name('payment.edit');
+  
+    // Payment (CAISSIER)
+    Route::middleware('role:caissier|admin')->group(function () {
+        Route::get('/paiements', App\Livewire\Payment\Index::class)->name('admin.payments');
+        Route::get('/paiements/{payment}/edit', App\Livewire\Payment\Edit::class)->name('payment.edit');
+ 
+        Route::get('/payments', App\Livewire\Payment\Index::class)->name('payment.index');
+        Route::get('/payments/create', App\Livewire\Payment\Create::class)->name('payment.create');
+        Route::get('/payments/{payment}', App\Livewire\Payment\Show::class)->name('payment.show');
+        Route::get('/payments/{payment}/receipt', App\Http\Controllers\Payment\Receipt::class)->name('payment.receipt');
+ 
+        // Consulter les soldes des étudiants
+        Route::get('/soldes', App\Livewire\Payment\StudentBalances::class)->name('payment.balances');
+    });
 
-    Route::get('/payments', App\Livewire\Payment\Index::class)->name('payment.index');
-    Route::get('/payments/create', App\Livewire\Payment\Create::class)->name('payment.create');
-    Route::get('/payments/{payment}', App\Livewire\Payment\Show::class)->name('payment.show');
-    Route::get('/payments/{payment}/receipt', App\Http\Controllers\Payment\Receipt::class)->name('payment.receipt');
 
     // Teacher
     // Route::get('/teachers', App\Livewire\Teacher\Index::class)->name('admin.teachers');
@@ -83,6 +90,7 @@ Route::prefix('admin')->group(function () {
     // GESTION DES UTILISATEURS ET DES ROLES (ADMIN UNIQUEMENT)
     Route::middleware('role:admin')->group(function () {
         Route::get('/utilisateurs', App\Livewire\Admin\UserManagement::class)->name('admin.users');
+        Route::get('/activites', App\Livewire\ActivityLog\ActivityLogList::class)->name('admin.activity_logs');
     });
 })->middleware('auth');
 
