@@ -20,9 +20,12 @@ use App\Livewire\Cotation\Index as Cotation_Index;
 use App\Livewire\Cotation\Grade as Cotation_Grade;
 
 
-Route::get('/', function () {
-    return view('welcome');
-})->name('home');
+
+Route::redirect('/','login')->name('home');
+
+Route::get('/register', function () {
+    return view('auth.login');
+});
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -33,19 +36,23 @@ Route::get('/verify/{code}', App\Http\Controllers\Documents\Verify::class)->name
 
 
 // APPARITAIRE
-Route::get('/Inscriptions/create', Enrollment_Create::class)->name('enrollment.create')->middleware('auth');
-Route::get('/Inscriptions', Enrollment_Index::class)->name('enrollment.index')->middleware('auth');
-Route::get('/Inscriptions/{enrollment}/edit', Enrollement_Edit::class)->name('enrollment.edit')->middleware('auth');
+Route::middleware(['auth', 'role:apparitaire|admin'])->group(function () {
 
-// Students
-Route::get('/Etudiants/all', Student_Index::class)->name('student.index')->middleware('auth');
-Route::get('/Etudiants/create', App\Livewire\Student\Create::class)->name('student.create')->middleware('auth');
-Route::get('/Etudiants/{user}/edit', Students_Edit::class)->name('student.edit')->middleware('auth');
-// Route::get('/Inscriptions', Enrollment_Index::class)->name('enrollment.index')->middleware('auth');
+    Route::get('/Inscriptions/create', Enrollment_Create::class)->name('enrollment.create');
+    Route::get('/Inscriptions', Enrollment_Index::class)->name('enrollment.index');
+    Route::get('/Inscriptions/{enrollment}/edit', Enrollement_Edit::class)->name('enrollment.edit');
+
+    // Students
+    Route::get('/Etudiants/all', Student_Index::class)->name('student.index');
+    Route::get('/Etudiants/create', App\Livewire\Student\Create::class)->name('student.create');
+    Route::get('/Etudiants/{user}/edit', Students_Edit::class)->name('student.edit');
+
+    // Gestion des documents académiques (classer / rechercher / consulter / historique)
+    Route::get('/documents', App\Livewire\Documents\Index::class)->name('documents.index');
+});
 
 
 Route::prefix('admin')->group(function () {
-
   
     // Payment (CAISSIER)
     Route::middleware('role:caissier|admin')->group(function () {

@@ -1,3 +1,6 @@
+<div class="page-frame"></div>
+<div class="page-frame-inner"></div>
+
 <div class="header">
     <div class="flag-bar">
         <span class="blue"></span>
