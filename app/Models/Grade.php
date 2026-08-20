@@ -2,11 +2,12 @@
 
 namespace App\Models;
 
-
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Grade extends Model
 {
+     use LogsActivity;
     protected $fillable = [
         'course_assignment_id',
         'user_id',        // anciennement user_id

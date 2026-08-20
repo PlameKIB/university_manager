@@ -23,21 +23,21 @@
                     Dashboard
                 </flux:navlist.item>
 
-                {{-- Inscription rapide --}}
-                @hasanyrole('admin')
+                {{-- Inscription rapide (APPARITAIRE) --}}
+                @hasanyrole('apparitaire|admin')
                 <flux:navlist.item icon="identification" :href="route('enrollment.create')"
                     :current="request()->routeIs('enrollment.create')" wire:navigate>
                     Inscription
                 </flux:navlist.item>
                 @endhasanyrole
 
-                {{-- Payment --}}
-                @role('admin')
+                {{-- Payment (CAISSIER) --}}
+                @hasanyrole('caissier|admin')
                 <flux:navlist.item icon="credit-card" :href="route('admin.payments')"
                     :current="request()->routeIs('admin.payments')" wire:navigate>
                     Paiements
                 </flux:navlist.item>
-                @endrole
+                @endhasanyrole
 
                 {{-- MENU COTATION (ENSEIGNANT UNIQUEMENT) --}}
                 @hasanyrole('enseignant|admin')
@@ -47,8 +47,8 @@
                 </flux:navlist.item>
                 @endhasanyrole
 
-                {{-- MENU INSCRIPTIONS --}}
-                @hasanyrole('admin')
+                {{-- MENU INSCRIPTIONS (APPARITAIRE) --}}
+                @hasanyrole('apparitaire|admin')
                 <flux:navlist.group expandable collapsed heading="Inscriptions" icon="document-text">
 
                     <flux:navlist.item icon="list-bullet" :href="route('enrollment.index')"
@@ -68,8 +68,8 @@
                 </flux:navlist.group>
                 @endhasanyrole
 
-                {{-- MENU ETUDIANTS --}}
-                @role('admin')
+                {{-- MENU ETUDIANTS (APPARITAIRE) --}}
+                @hasanyrole('apparitaire|admin')
                 <flux:navlist.group expandable collapsed heading="Etudiants" icon="users">
 
                     <flux:navlist.item icon="user-group" :href="route('student.index')"
@@ -83,7 +83,23 @@
                     </flux:navlist.item>
 
                 </flux:navlist.group>
-                @endrole
+                @endhasanyrole
+
+                {{-- MENU DOCUMENTS (APPARITAIRE) --}}
+                @hasanyrole('apparitaire|admin')
+                <flux:navlist.item icon="folder-open" :href="route('documents.index')"
+                    :current="request()->routeIs('documents.index')" wire:navigate>
+                    Gestion des documents
+                </flux:navlist.item>
+                @endhasanyrole
+
+                {{-- MENU SOLDES DES ETUDIANTS (CAISSIER) --}}
+                @hasanyrole('caissier|admin')
+                <flux:navlist.item icon="scale" :href="route('payment.balances')"
+                    :current="request()->routeIs('payment.balances')" wire:navigate>
+                    Soldes des étudiants
+                </flux:navlist.item>
+                @endhasanyrole
 
                 {{-- MENU COURS / COTATION (ADMIN) --}}
                 @role('admin')

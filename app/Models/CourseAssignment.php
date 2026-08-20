@@ -7,10 +7,12 @@ use App\Models\Course;
 use App\Models\Grade;
 use App\Models\Promotion;
 use App\Models\User;
+use App\Traits\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class CourseAssignment extends Model
 {
+     use LogsActivity;
     protected $fillable = [
         'course_id',
         'promotion_id',

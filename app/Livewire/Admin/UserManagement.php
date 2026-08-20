@@ -37,6 +37,8 @@ class UserManagement extends Component
         'admin' => 'Administrateur',
         'enseignant' => 'Enseignant',
         'student' => 'Étudiant',
+        'apparitaire' => 'Apparitaire',
+        'caissier' => 'Caissier',
     ];
 
     public function updatingSearch()
@@ -152,6 +154,8 @@ class UserManagement extends Component
             'totalAdmins' => User::role('admin')->count(),
             'totalTeachers' => User::role('enseignant')->count(),
             'totalStudents' => User::role('student')->count(),
+            'totalApparitaires' => User::role('apparitaire')->count(),
+            'totalCaissiers' => User::role('caissier')->count(),
         ]);
     }
 }
