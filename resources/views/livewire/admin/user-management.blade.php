@@ -72,30 +72,59 @@
             </div>
         </div>
 
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Apparitaires</p>
+                    <h3 class="text-2xl font-bold text-green-600 mt-1">{{ $totalApparitaires }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-green-100 dark:bg-green-900/30 flex items-center justify-center">
+                    <i class="fa-solid fa-user-tie text-green-600 text-lg"></i>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="bg-white dark:bg-gray-800 rounded-2xl border border-gray-100 dark:border-gray-700 p-5 shadow-sm">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">Caissiers</p>
+                    <h3 class="text-2xl font-bold text-yellow-600 mt-1">{{ $totalCaissiers }}</h3>
+                </div>
+                <div class="w-12 h-12 rounded-xl bg-yellow-100 dark:bg-yellow-900/30 flex items-center justify-center">
+                    <i class="fa-solid fa-cash-register text-yellow-600 text-lg"></i>
+                </div>
+            </div>
+        </div>
+
     </div>
 
     {{-- TABLE CARD --}}
-    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
+    <div
+        class="bg-white dark:bg-gray-800 rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700 overflow-hidden">
 
         {{-- TOP BAR --}}
-        <div class="px-6 py-5 border-b border-gray-100 dark:border-gray-700 flex flex-col lg:flex-row lg:items-center gap-4 lg:justify-between">
+        <div
+            class="px-6 py-5 border-b border-gray-100 dark:border-gray-700 flex flex-col lg:flex-row lg:items-center gap-4 lg:justify-between">
 
             <div>
                 <h3 class="text-base font-semibold text-gray-800 dark:text-white">Liste des utilisateurs</h3>
-                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Recherchez, filtrez par rôle et gérez les accès</p>
+                <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Recherchez, filtrez par rôle et gérez les accès
+                </p>
             </div>
 
             <div class="flex flex-col sm:flex-row gap-3 w-full lg:w-auto">
 
                 {{-- ROLE FILTER --}}
-                <select wire:model.live="roleFilter"
-                    class="w-full sm:w-48 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
+                <select wire:model.live="roleFilter" class="w-full sm:w-48 px-4 py-3 rounded-xl border border-gray-200 dark:border-gray-600
                            bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-white text-sm
                            focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition">
                     <option value="">Tous les rôles</option>
                     <option value="admin">Administrateur</option>
                     <option value="enseignant">Enseignant</option>
                     <option value="student">Étudiant</option>
+                    <option value="apparitaire">Apparitaire</option>
+                    <option value="caissier">Caissier</option>
                 </select>
 
                 {{-- SEARCH --}}
@@ -120,10 +149,18 @@
 
                 <thead class="bg-gray-50 dark:bg-gray-900/50 border-b border-gray-100 dark:border-gray-700">
                     <tr>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Utilisateur</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Matricule</th>
-                        <th class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Rôles</th>
-                        <th class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Actions</th>
+                        <th
+                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                            Utilisateur</th>
+                        <th
+                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                            Matricule</th>
+                        <th
+                            class="px-6 py-4 text-left text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                            Rôles</th>
+                        <th
+                            class="px-6 py-4 text-right text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">
+                            Actions</th>
                     </tr>
                 </thead>
 
@@ -137,7 +174,7 @@
                             <td class="px-6 py-4">
                                 <div class="flex items-center gap-4">
                                     <div class="w-11 h-11 rounded-full bg-indigo-100 dark:bg-indigo-900/30
-                                                flex items-center justify-center flex-shrink-0">
+                                                        flex items-center justify-center flex-shrink-0">
                                         <span class="text-indigo-600 font-bold text-sm">
                                             {{ strtoupper(substr($user->name, 0, 1)) }}
                                         </span>
@@ -159,8 +196,8 @@
                             {{-- MATRICULE --}}
                             <td class="px-6 py-4">
                                 <span class="inline-flex items-center gap-2 px-3 py-1 rounded-lg
-                                             bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200
-                                             text-xs font-semibold">
+                                                     bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-200
+                                                     text-xs font-semibold">
                                     <i class="fa-solid fa-id-card"></i>
                                     {{ $user->matricule ?? '--' }}
                                 </span>
@@ -182,8 +219,9 @@
                                                 'student' => 'Étudiant',
                                             ];
                                         @endphp
-                                        <span class="text-[11px] font-semibold px-2.5 py-1 rounded-lg
-                                                     {{ $roleStyles[$role->name] ?? 'bg-gray-100 text-gray-500' }}">
+                                        <span
+                                            class="text-[11px] font-semibold px-2.5 py-1 rounded-lg
+                                                                     {{ $roleStyles[$role->name] ?? 'bg-gray-100 text-gray-500' }}">
                                             {{ $roleLabels[$role->name] ?? $role->name }}
                                         </span>
                                     @empty
@@ -197,10 +235,9 @@
                                 <div class="flex items-center justify-end gap-2">
 
                                     {{-- MANAGE ROLES --}}
-                                    <button wire:click="openRoles({{ $user->id }})"
-                                        class="w-9 h-9 rounded-lg bg-indigo-50 hover:bg-indigo-100
-                                               dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40
-                                               flex items-center justify-center text-indigo-600 transition"
+                                    <button wire:click="openRoles({{ $user->id }})" class="w-9 h-9 rounded-lg bg-indigo-50 hover:bg-indigo-100
+                                                       dark:bg-indigo-900/20 dark:hover:bg-indigo-900/40
+                                                       flex items-center justify-center text-indigo-600 transition"
                                         title="Gérer les rôles">
                                         <i class="fa-solid fa-user-gear text-sm"></i>
                                     </button>
@@ -210,14 +247,15 @@
                                         <button wire:click="delete({{ $user->id }})"
                                             wire:confirm="Voulez-vous vraiment supprimer cet utilisateur ? Cette action est irréversible."
                                             class="w-9 h-9 rounded-lg bg-red-50 hover:bg-red-100
-                                                   dark:bg-red-900/20 dark:hover:bg-red-900/40
-                                                   flex items-center justify-center text-red-600 transition"
+                                                                   dark:bg-red-900/20 dark:hover:bg-red-900/40
+                                                                   flex items-center justify-center text-red-600 transition"
                                             title="Supprimer">
                                             <i class="fa-solid fa-trash text-sm"></i>
                                         </button>
                                     @else
-                                        <span class="w-9 h-9 rounded-lg bg-gray-50 dark:bg-gray-900
-                                                     flex items-center justify-center text-gray-300 dark:text-gray-600"
+                                        <span
+                                            class="w-9 h-9 rounded-lg bg-gray-50 dark:bg-gray-900
+                                                                     flex items-center justify-center text-gray-300 dark:text-gray-600"
                                             title="Vous ne pouvez pas supprimer votre propre compte">
                                             <i class="fa-solid fa-trash text-sm"></i>
                                         </span>
@@ -234,11 +272,13 @@
                             <td colspan="4" class="px-6 py-16 text-center">
                                 <div class="flex flex-col items-center">
                                     <div class="w-20 h-20 rounded-2xl bg-gray-100 dark:bg-gray-700
-                                                flex items-center justify-center mb-4">
+                                                        flex items-center justify-center mb-4">
                                         <i class="fa-solid fa-users-slash text-3xl text-gray-400"></i>
                                     </div>
-                                    <h3 class="text-lg font-semibold text-gray-700 dark:text-white">Aucun utilisateur trouvé</h3>
-                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Essayez une autre recherche ou un autre filtre.</p>
+                                    <h3 class="text-lg font-semibold text-gray-700 dark:text-white">Aucun utilisateur trouvé
+                                    </h3>
+                                    <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Essayez une autre recherche ou
+                                        un autre filtre.</p>
                                 </div>
                             </td>
                         </tr>
@@ -286,7 +326,7 @@
                     @endphp
 
                     <label class="flex items-center gap-3 p-3 rounded-xl border border-gray-200 dark:border-gray-700
-                                  hover:bg-gray-50 dark:hover:bg-gray-700/40 cursor-pointer transition">
+                                          hover:bg-gray-50 dark:hover:bg-gray-700/40 cursor-pointer transition">
 
                         <input type="checkbox" wire:model="selectedRoles" value="{{ $roleValue }}"
                             class="w-4 h-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500">
@@ -308,7 +348,8 @@
                     <flux:button variant="filled" wire:click="closeRoleModal">Annuler</flux:button>
                 </flux:modal.close>
 
-                <flux:button variant="filled" class="!bg-indigo-600 !text-white hover:!bg-indigo-700" wire:click="saveRoles">
+                <flux:button variant="filled" class="!bg-indigo-600 !text-white hover:!bg-indigo-700"
+                    wire:click="saveRoles">
                     Enregistrer
                 </flux:button>
             </div>
