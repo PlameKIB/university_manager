@@ -181,8 +181,10 @@
 
         <flux:dropdown position="bottom" align="start">
             @if(auth()->user()->photo)
-                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="{{ auth()->user()->name }}"
-                     class="w-10 h-10 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-600 transition">
+                <button type="button" aria-label="Ouvrir le menu utilisateur" class="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="{{ auth()->user()->name }}"
+                         class="w-10 h-10 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition">
+                </button>
             @else
                 <flux:profile :name="auth()->user()->name" :initials="auth()->user()->initials()"
                     icon-trailing="chevrons-up-down" />
@@ -243,8 +245,10 @@
 
         <flux:dropdown position="top" align="end">
             @if(auth()->user()->photo)
-                <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="{{ auth()->user()->name }}"
-                     class="w-10 h-10 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800 cursor-pointer hover:border-indigo-400 dark:hover:border-indigo-600 transition">
+                <button type="button" aria-label="Ouvrir le menu utilisateur" class="cursor-pointer rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    <img src="{{ asset('storage/' . auth()->user()->photo) }}" alt="{{ auth()->user()->name }}"
+                         class="w-10 h-10 rounded-full object-cover border-2 border-indigo-200 dark:border-indigo-800 hover:border-indigo-400 dark:hover:border-indigo-600 transition">
+                </button>
             @else
                 <flux:profile :initials="auth()->user()->initials()" icon-trailing="chevron-down" />
             @endif
@@ -281,7 +285,7 @@
                 <flux:menu.separator />
 
                 <flux:menu.radio.group>
-                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Settings</flux:menu.item>
+                    <flux:menu.item href="/settings/profile" icon="cog" wire:navigate>Paramètres</flux:menu.item>
                 </flux:menu.radio.group>
 
                 <flux:menu.separator />
