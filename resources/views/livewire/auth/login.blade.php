@@ -73,7 +73,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
 }; ?>
 
 <div class="flex flex-col gap-6">
-    <x-auth-header title="Log in to your account" description="Enter your email and password below to log in" />
+    <x-auth-header title="connectez vous" description="Entrez mail et mot de passe" />
 
     <!-- Session Status -->
     <x-auth-session-status class="text-center" :status="session('status')" />
@@ -96,13 +96,13 @@ new #[Layout('components.layouts.auth')] class extends Component {
 
             @if (Route::has('password.request'))
                 <x-text-link class="absolute right-0 top-0" href="{{ route('password.request') }}">
-                    {{ __('Forgot your password?') }}
+                    {{ __('mot de passe oublié?') }}
                 </x-text-link>
             @endif
         </div>
 
         <!-- Remember Me -->
-        <flux:checkbox wire:model="remember" label="{{ __('Remember me') }}" />
+        <flux:checkbox wire:model="remember" label="{{ __('se souvenir de moi') }}" />
 
         <div class="flex items-center justify-end">
             <flux:button variant="primary" type="submit" class="w-full">{{ __('Log in') }}</flux:button>
@@ -110,7 +110,7 @@ new #[Layout('components.layouts.auth')] class extends Component {
     </form>
 
     <div class="space-x-1 text-center text-sm text-zinc-600 dark:text-zinc-400">
-        Don't have an account?
-        <x-text-link href="{{ route('register') }}">Sign up</x-text-link>
+        vous n'avez pas de compte?
+        <x-text-link href="{{ route('register') }}">Creer un compte</x-text-link>
     </div>
 </div>
