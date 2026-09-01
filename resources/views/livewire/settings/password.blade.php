@@ -40,12 +40,12 @@ new class extends Component {
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <x-settings.layout heading="Update password" subheading="Ensure your account is using a long, random password to stay secure">
+    <x-settings.layout heading="Mot de passe" subheading="Assurez-vous que votre compte utilise un mot de passe long et aléatoire pour rester sécurisé">
         <form wire:submit="updatePassword" class="mt-6 space-y-6">
             <flux:input
                 wire:model="current_password"
                 id="update_password_current_passwordpassword"
-                label="{{ __('Current password') }}"
+                label="{{ __('Mot de passe actuel') }}"
                 type="password"
                 name="current_password"
                 required
@@ -54,7 +54,7 @@ new class extends Component {
             <flux:input
                 wire:model="password"
                 id="update_password_password"
-                label="{{ __('New password') }}"
+                label="{{ __('Nouveau mot de passe') }}"
                 type="password"
                 name="password"
                 required
@@ -63,7 +63,7 @@ new class extends Component {
             <flux:input
                 wire:model="password_confirmation"
                 id="update_password_password_confirmation"
-                label="{{ __('Confirm Password') }}"
+                label="{{ __('Confirmer le mot de passe') }}"
                 type="password"
                 name="password_confirmation"
                 required

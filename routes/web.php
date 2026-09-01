@@ -20,12 +20,10 @@ use App\Livewire\Cotation\Index as Cotation_Index;
 use App\Livewire\Cotation\Grade as Cotation_Grade;
 
 
-
 Route::redirect('/','login')->name('home');
 
-Route::get('/register', function () {
-    return view('auth.login');
-});
+
+Route::get('/register', function () { return redirect('/login'); });
 
 Route::view('dashboard', 'dashboard')
     ->middleware(['auth', 'verified'])
@@ -122,3 +120,4 @@ Route::middleware(['auth'])->group(function () {
 });
 
 require __DIR__ . '/auth.php';
+Route::redirect('/register', '/login');

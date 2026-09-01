@@ -80,14 +80,14 @@ new class extends Component {
 
         $user->sendEmailVerificationNotification();
 
-        Session::flash('status', 'verification-link-sent');
+        Session::flash('status', 'le lien de vérification a été renvoyé à votre adresse e-mail.');
     }
 }; ?>
 
 <section class="w-full">
     @include('partials.settings-heading')
 
-    <x-settings.layout heading="Profile" subheading="Update your name and email address">
+    <x-settings.layout heading="Profile" subheading="Mettre à jour les informations de profil et l'adresse e-mail de votre compte.">
         <form wire:submit="updateProfileInformation" class="my-6 w-full space-y-6">
             <div class="space-y-4">
                 <flux:label>{{ __('Profile photo') }}</flux:label>
